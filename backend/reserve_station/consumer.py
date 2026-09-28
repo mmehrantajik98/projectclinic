@@ -1,6 +1,6 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from .models import Personal
+from .models import SubmitPersonal
 from asgiref.sync import sync_to_async
 
 
@@ -19,77 +19,33 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         print("Connected:", self.room_name)
 
-    async def disconnect(self, code):
+        
 
+    async def disconnect(self, code):
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
 
         print("Disconnected:", self.room_name)
+        
 
-    async def receive(self, text_data):
+    async def submitInfo(self, event):
 
-        data = json.loads(text_data)
-
-        model = await sync_to_async(list)(Personal.objects.all())
-
-        if data["type"] == "send_data":
-
-            for person in model:
-
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        "type": "service_message",
-                        "name": person.name,
-                        "age": person.age,
-                        "phone": person.phone,
-                        "file": person.file,
-                        "address": person.address,
-                        "reserve_date": person.reserve_date,
-                        "date": person.date,
-                        "services": person.services,
-                        "id": person.id,
-                        "price": person.price,
-                    }
-                )
-
-    async def service_message(self, event):
+        print("EVENT RECEIVED:", event)
 
         await self.send(
             text_data=json.dumps({
                 "type": "get_Data",
+                "id": event["id"],
                 "name": event["name"],
                 "age": event["age"],
                 "phone": event["phone"],
                 "file": event["file"],
                 "address": event["address"],
-                "reserve_date": str(event["reserve_date"]),
-                "date": str(event["date"]),
-                "id": event["id"],
+                "reserve_date": event["reserve_date"],
+                "date": event["date"],
                 "services": event["services"],
                 "price": event["price"],
-            })
-        )
-
-    async def new_person(self, event):
-
-        person = await sync_to_async(
-            Personal.objects.get
-        )(id=event["id"])
-
-        await self.send(
-            text_data=json.dumps({
-                "type": "get_Data",
-                "name": person.name,
-                "age": person.age,
-                "phone": person.phone,
-                "file": person.file,
-                "address": person.address,
-                "reserve_date": str(person.reserve_date),
-                "date": str(person.date),
-                "services": person.services,
-                "price": person.price,
             })
         )

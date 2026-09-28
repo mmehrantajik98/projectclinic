@@ -10,6 +10,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import timedelta
 from rest_framework.parsers import MultiPartParser, FormParser 
 from rest_framework.decorators import api_view, parser_classes
+from django.views.decorators.csrf import csrf_exempt
 
 @api_view(["POST"])
 def Post_Info(request):
@@ -55,8 +56,8 @@ def Search_Info(request):
 def Service_add_Info(request, id):
 
     try:
-        person = Personal.objects.get(id=id)
-    except Personal.DoesNotExist:
+        person = SubmitPersonal.objects.get(id=id)
+    except SubmitPersonal.DoesNotExist:
         return Response(
             {"error": "person not found"},
             status=404
@@ -87,7 +88,6 @@ def Service_add_Info(request, id):
                 "id": person.id
             }
         )
-    
 
     return Response({
         "id": person.id,
@@ -103,7 +103,7 @@ def Get_Info(request):
 
     return Response(serializer.data)
 
- 
+
 @api_view(["DELETE"])
 def Delete_Info(request, id):
 
@@ -171,7 +171,7 @@ def Confirm_Info(request, id):
 
     person = Personal.objects.get(id=id)
 
-    SubmitPersonal.objects.create(
+    submit_person = SubmitPersonal.objects.create(
         name=person.name,
         age=person.age,
         phone=person.phone,
@@ -182,9 +182,31 @@ def Confirm_Info(request, id):
         price=person.price,
     )
 
+    channel_layer = get_channel_layer()
+    
+    print("SENDING:", submit_person.id)
+
+    async_to_sync(channel_layer.group_send)(
+        "services_getdata",
+        {
+            "type": "submitInfo",
+            "id": submit_person.id,
+            "name": submit_person.name,
+            "age": submit_person.age,
+            "phone": submit_person.phone,
+            "file": str(submit_person.file) if submit_person.file else None,
+            "address": submit_person.address,
+            "reserve_date": str(submit_person.reserve_date),
+            "date": str(submit_person.date),
+            "services": submit_person.services,
+            "price": submit_person.price,
+        }
+    )
+
     return Response({
         "message": "اطلاعات تثبیت شد"
     })
+
 
 @api_view(["GET"])
 def Get_Submit_Info(request):
@@ -340,6 +362,62 @@ def del_photo(request, id, photo):
         "successfully_delete!": "successfully_delete!"
     })
 
+@api_view(["DELETE"])
+def Delete_Servies(request, person_id):
+
+    try:
+        getID = SubmitPersonal.objects.get(id=person_id)
+    except SubmitPersonal.DoesNotExist:
+        return Response({
+            "error": "user not found"
+        }, status=404)
+
+    service = request.data.get("services")
+
+    print("SERVICE FROM FRONT:", repr(service))
+    print("BEFORE:", repr(getID.services))
+
+    if getID.services:
+        services = [item.strip() for item in getID.services.split(",")]
+
+        if service in services:
+            services.remove(service)
+
+        getID.services = ",".join(services)
+        getID.save()
+
+    print("AFTER:", repr(getID.services))
+
+    return Response({
+        "message": "service deleted",
+        "services": getID.services
+    })
+
+@api_view(["POST"])
+def Sign(request):
+
+    serializer = UserSerializer(data=request.data)
+
+    username = request.data.get("username")
+
+    if Users.objects.filter(username=username).exists():
+        return Response({"already_username": f"{username} is already have!"}, status=400)
+
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def getUsers(request):
+
+    user = request.user
+
+    return Response({
+        "username": user.username,
+        "role": user.role
+    })
+
 
 class CreateTokenCookie(TokenObtainPairView):
 
@@ -357,7 +435,7 @@ class CreateTokenCookie(TokenObtainPairView):
             value=access_token,
             httponly=True,
             secure=False,
-            samesite="Lax",
+            samesite="None",
             max_age=86400,
         )
 
@@ -366,10 +444,11 @@ class CreateTokenCookie(TokenObtainPairView):
             value=refresh_token,
             httponly=True,
             secure=False,
-            samesite="Lax",
+            samesite="None",
             max_age=int(timedelta(days=60).total_seconds()),
         )
 
         print("LOGIN RESPONSE:", response.data)
 
         return response
+

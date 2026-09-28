@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./login.css";
 import * as Yup from "yup";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface Users {
     username: string;
@@ -14,6 +15,8 @@ const Login = () => {
         username: "",
         password: "",
     });
+
+    const navigate = useNavigate()
 
     const [error, setError] = useState<Yup.ValidationError | null>(null);
 
@@ -46,7 +49,9 @@ const Login = () => {
                 }
             );
 
+            
             console.log(res.data);
+            navigate("/", {replace:true})
 
         } catch (e) {
 
@@ -110,6 +115,7 @@ const Login = () => {
                 <button type="submit">
                     ورود
                 </button>
+                
             </form>
         </div>
     );

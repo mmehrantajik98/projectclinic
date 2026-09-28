@@ -2,12 +2,12 @@ from django.contrib.auth.models import BaseUserManager
 
 class Personels(BaseUserManager):
 
-    def create_user(self, username, password=None, **extra_fields):
+    def create_user(self, username, password=None, role=None, **extra_fields):
 
         if not username:
             raise ValueError("نام کاربری الزامی است")
 
-        user = self.model(username=username, **extra_fields)
+        user = self.model(username=username, role=role, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         extra_fields.setdefault("is_active", True)

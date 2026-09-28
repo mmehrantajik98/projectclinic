@@ -67,107 +67,141 @@ const Consent: React.FC = () => {
 
     };
 
+    const del_service = async (
+        personID: number,
+        service: string
+    ) => {
+
+        const cleanService = service.trim();
+
+        setAfrad((prev) =>
+            prev.map((person) => {
+
+                if (person.id === personID) {
+
+                    return {
+                        ...person,
+                        services: person.services
+                            .split(",")
+                            .filter(
+                                (item) =>
+                                    item.trim() !== cleanService
+                            )
+                            .join(",")
+                    };
+
+                }
+
+                return person;
+
+            })
+        );
+
+        try {
+
+            await axios.delete(
+                `http://127.0.0.1:8000/api/delete_service/${personID}/`,
+                {
+                    withCredentials: true,
+                    data: {
+                        services: cleanService
+                    }
+                }
+            );
+
+        } catch (error) {
+
+            console.log(error);
+
+        }
+
+    };
+
     useEffect(() => {
+
+        let reconnected:ReturnType<typeof setTimeout>;
 
         console.log("USE EFFECT RUN");
 
-        const wkurl =
-            "ws://127.0.0.1:8000/ws/services/getdata/";
+        const getSubmitInfo = async () => {
 
-        web.current = new WebSocket(wkurl);
+            try {
 
-        web.current.onopen = () => {
-
-            console.log("connected websocket");
-
-            web.current?.send(
-                JSON.stringify({
-                    type: "send_data"
-                })
-            );
-
-        };
-
-        web.current.onmessage = (event) => {
-
-            const data = JSON.parse(event.data);
-
-            console.log(
-                "WEBSOCKET DATA:",
-                data
-            );
-
-            if (data.type === "get_Data") {
-
-                const person: afrad = {
-                    name: data.name,
-                    age: data.age,
-                    phone: data.phone,
-                    file: data.file,
-                    address: data.address,
-                    reserve_date: data.reserve_date,
-                    date: data.date,
-                    id: data.id,
-                    services: data.services,
-                    price: data.price,
-                };
-
-                console.log(
-                    "PERSON:",
-                    person
+                const req = await axios.get(
+                    "http://127.0.0.1:8000/api/get_submit_info/"
                 );
 
-                setAfrad((prev) => {
+                setAfrad(req.data);
 
-                    const exists = prev.some(
-                        (item) =>
-                            item.id === person.id
-                    );
+                console.log(
+                    "SUBMIT DATA:",
+                    req.data
+                );
 
-                    if (exists) {
-                        return prev;
-                    }
+            } catch (error) {
 
-                    return [
-                        ...prev,
-                        person
-                    ];
-
-                });
+                console.log(
+                    "GET SUBMIT ERROR:",
+                    error
+                );
 
             }
 
         };
 
-        web.current.onerror = (error) => {
+        getSubmitInfo();
 
-            console.log(
-                "WebSocket error:",
-                error
+        const wkurl =
+            "ws://127.0.0.1:8000/ws/services/getdata/";
+
+        const connectWebSocket = () => {
+            web.current = new WebSocket(
+                "ws://127.0.0.1:8000/ws/services/getdata/"
             );
 
+            web.current.onopen = () => {
+                console.log("connected websocket");
+            };
+
+            web.current.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+
+                setAfrad(prev => [...prev, data]);
+            };
+
+            web.current.onerror = (error) => {
+                console.log("websocket error", error);
+            };
+
+            web.current.onclose = (event) => {
+                console.log("CLOSE CODE:", event.code);
+                console.log("CLOSE REASON:", event.reason);
+
+                reconnected = setTimeout(() => {
+                    connectWebSocket();
+                }, 2000);
+            };
+           
         };
 
-        web.current.onclose = () => {
-
-            console.log(
-                "WebSocket closed"
-            );
-
-        };
-
+         connectWebSocket()
+         
         return () => {
 
             console.log(
-                "USE EFFECT CLEANUP"
+                "CLEANUP EXECUTED"
             );
 
+            clearTimeout(reconnected)
             web.current?.close();
             web.current = null;
 
         };
 
+        
+
     }, []);
+
 
     return (
 
@@ -272,7 +306,7 @@ const Consent: React.FC = () => {
                         <div>
                             <span>قیمت</span>
                             <p>
-                                {selectedPerson.price}
+                                {selectedPerson.price.toLocaleString("en-US")}
                             </p>
                         </div>
 
@@ -341,9 +375,10 @@ const Consent: React.FC = () => {
                                     </button>
 
                                     <button
-                                        onClick={() =>
-                                            setAddText(false)
-                                        }
+                                        onClick={() => {
+                                            setAddText(false);
+                                            setService("");
+                                        }}
                                     >
                                         لغو
                                     </button>
@@ -386,7 +421,15 @@ const Consent: React.FC = () => {
                                                         {item.trim()}
                                                     </span>
 
-                                                    <button className="delete-service">
+                                                    <button
+                                                        className="delete-service"
+                                                        onClick={() =>
+                                                            del_service(
+                                                                selectedPerson.id,
+                                                                item
+                                                            )
+                                                        }
+                                                    >
                                                         ×
                                                     </button>
 

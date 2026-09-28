@@ -5,11 +5,22 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 class Users(AbstractBaseUser, PermissionsMixin):
 
-    username = models.CharField(unique=True, max_length=144)
+    ROLE_CHOICES = [
+            ("callcenter", "کال سنتر"),
+            ("CEO", "مدیر"),
+            ("marketing", "مارکتینگ"),
+            ("doctor", "دکتر"),
+            ("reception", "پذیرش"),
+            ("photographer", "عکاس"),
+            ("Assistant_Manager", "مدیر بالینی"),
+            ("Assistant", "دستیار"),
+            ("Consent", "مشاوره"),
+        ]
 
+    username = models.CharField(unique=True, max_length=144)
+    role = models.CharField(choices=ROLE_CHOICES, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-
     USERNAME_FIELD = "username"
     objects = Personels()
     REQUIRED_FIELDS = []
@@ -124,19 +135,3 @@ class PersonalPicture(models.Model):
 
     def __str__(self):
         return f"{self.person.name} - تصاویر"
-
-
-class CallCenter(models.Model):
-
-    EMPLOYEE_CHOICES = [
-        ("atefeh", "عاطفه"),
-        ("haniye", "هانیه"),
-    ]
-
-    persons = models.ForeignKey(
-        Personal,
-        on_delete=models.CASCADE,
-        related_name="employee"
-    )
-
-    name = models.CharField(max_length=122)

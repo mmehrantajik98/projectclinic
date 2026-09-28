@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import Reception from "./reception";
+import Client from "./Client";
 import PeopleProvider from "./PeopleContext";
 import Peoples from "./peopls";
 import Layout from "./layout";
@@ -11,26 +11,73 @@ import CallCenterTable from "./callcentertable";
 import CallCenter from "./callcenter";
 import PhotoGraph from "./photographer";
 import Login from "./login";
+import Sign from "./sign";
+import Dashboard from "./dashboard";
+import ProtectedRoute from "./protectedRoute";
 
 const App = () => {
     return (
+
         <PeopleProvider>
         <CallCenterContext>
             <Layout>
                 <Routes>
-                    <Route path="/" element={<Reception />} />
+
+                    <Route path="/" element={<Dashboard />} />
+
+                    <Route path="/Client" element={<Client />} />
+                   
                     <Route path="/peoples" element={<Peoples />} />
+
                     <Route path="/login" element={<Login />} />
-                    <Route path="/consent" element={<Consent />} />
-                    <Route path="/Assistant" element={<Assistant />} />
-                    <Route path="/callcentertable" element={<CallCenterTable />} />
-                    <Route path="/photographer" element={<PhotoGraph />} />
-                    <Route path="/callcenter" element={<CallCenter />} />
+
+                    
+                        <Route path="/consent" element={
+                            <ProtectedRoute allowedroles={["Consent"]}>
+                                <Consent />
+                            </ProtectedRoute>
+                        } />
+                    
+
+                   
+                        <Route path="/Assistant" element={
+                            <ProtectedRoute allowedroles={["Assistant"]}>
+                                <Assistant />
+                            </ProtectedRoute>
+                        } />
+                    
+
+                    <Route path="/sign" element={<Sign />} />  
+
+                   
+                        <Route path="/photographer" element={
+                            <ProtectedRoute allowedroles={["photographer"]}>
+                                <PhotoGraph />
+                            </ProtectedRoute>
+                        } />
+                    
+
+                    
+                        <Route path="/callcenter" element={
+                            <ProtectedRoute allowedroles={["callcenter"]}>
+                                <CallCenter />
+                            </ProtectedRoute>
+                            } />
+
+                        <Route path="/callcentertable" element={
+                            <ProtectedRoute allowedroles={["callcenter"]}>
+                                <CallCenterTable /> 
+                            </ProtectedRoute>
+                        } />
+                   
+
                     <Route path="/peoples/:id" element={<PersonInfo />} />
+                    
                 </Routes>
             </Layout>
         </CallCenterContext>
         </PeopleProvider>
+
     );
 };
 

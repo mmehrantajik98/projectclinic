@@ -15,7 +15,7 @@ interface People {
     price: string;
 }
 
-const Reception: React.FC = () => {
+const Client: React.FC = () => {
 
     const contextConsent = useContext(contextCon);
     const web = useRef<WebSocket | null>(null);
@@ -411,5 +411,5 @@ const Reception: React.FC = () => {
     );
 };
 
-export default Reception;
+export default Client;
 
