@@ -9,6 +9,8 @@ interface Props {}
 const Aside: React.FC<Props> = () => {
 
     const user = useContext(UserContext);
+    console.log("USER:", user);
+    console.log("ROLE:", user?.role);
 
     return (
         <aside className="sidebar">
