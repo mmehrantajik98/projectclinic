@@ -18,6 +18,10 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+RUN apt-get update && \
+    apt-get install -y nginx && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY backend/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
@@ -26,6 +30,10 @@ COPY backend/ .
 
 COPY --from=frontend /frontend/dist /app/frontend_dist
 
-EXPOSE 8000
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "backend.asgi:application"]
+RUN rm -f /etc/nginx/sites-enabled/default
+
+EXPOSE 80
+
+CMD ["sh", "-c", "daphne -b 127.0.0.1 -p 8000 backend.asgi:application & nginx -g 'daemon off;'"]
