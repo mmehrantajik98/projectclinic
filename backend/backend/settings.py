@@ -26,12 +26,14 @@ SECRET_KEY = 'django-insecure-$=*1vn&6tj*&v1cvzel6t%+t51%2q85_htg%p(uh2fibgh5^(d
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "hedro.ir",
+    "www.hedro.ir",
     "localhost",
     "127.0.0.1",
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+    "http://localhost:5173", "hedro.ir", "www.hedro.ir"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
