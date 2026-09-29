@@ -36,7 +36,7 @@ const CallCenterTable: React.FC = () => {
         const getPeople = async () => {
             try {
                 const res = await axios.get(
-                    "http://127.0.0.1:8000/api/get_info/"
+                    "https://hedro.ir/api/get_info/"
                 );
 
                 context?.setPeople(res.data);
@@ -129,7 +129,7 @@ const CallCenterTable: React.FC = () => {
     const delete_id = async (id: number) => {
         try {
             await axios.delete(
-                `http://127.0.0.1:8000/api/delete_info/${id}/`
+                `https://hedro.ir/api/delete_info/${id}/`
             );
 
             context.setPeople((prev) =>
@@ -155,7 +155,7 @@ const CallCenterTable: React.FC = () => {
             }
 
             const req = await axios.post(
-                `http://127.0.0.1:8000/api/confirm_info/${id}/`,
+                `https://hedro.ir/api/confirm_info/${id}/`,
                 {
                     name: person.name,
                     age: person.age,
@@ -187,7 +187,7 @@ const CallCenterTable: React.FC = () => {
     ) => {
         try {
             const up = await axios.patch(
-                `http://127.0.0.1:8000/api/update_info/${id}/`,
+                `https://hedro.ir/api/update_info/${id}/`,
                 {
                     name: args.name,
                     phone: args.phone,

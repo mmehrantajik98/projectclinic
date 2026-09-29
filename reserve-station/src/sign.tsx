@@ -60,7 +60,7 @@ const Sign = () => {
             });
 
             await axios.post(
-                "http://127.0.0.1:8000/api/postUsers/",
+                "https://hedro.ir/api/postUsers/",
                 {
                     username: userpass.username,
                     password: userpass.password,

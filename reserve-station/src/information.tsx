@@ -22,7 +22,7 @@ interface Photos {
     img_after: string | null;
 }
 
-const API = "http://127.0.0.1:8000";
+const API = "https://hedro.ir";
 
 const PersonInfo: React.FC = () => {
 

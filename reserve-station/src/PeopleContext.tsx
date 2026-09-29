@@ -37,7 +37,7 @@ const PeopleProvider: React.FC<Children> = ({ children }) => {
         const getPeople = async () => {
             try {
                 const res = await axios.get(
-                    "http://127.0.0.1:8000/api/get_info/"
+                    "https://hedro.ir/api/get_info/"
                 );
 
                 setPeople(res.data);

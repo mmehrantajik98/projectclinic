@@ -434,7 +434,7 @@ class CreateTokenCookie(TokenObtainPairView):
             key="access",
             value=access_token,
             httponly=True,
-            secure=False,
+            secure=True,
             samesite="None",
             max_age=86400,
         )
@@ -443,7 +443,7 @@ class CreateTokenCookie(TokenObtainPairView):
             key="refresh",
             value=refresh_token,
             httponly=True,
-            secure=False,
+            secure=True,
             samesite="None",
             max_age=int(timedelta(days=60).total_seconds()),
         )

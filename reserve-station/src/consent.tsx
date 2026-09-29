@@ -37,7 +37,7 @@ const Consent: React.FC = () => {
         try {
 
             const req = await axios.post(
-                `http://127.0.0.1:8000/api/update_service/${id}/`,
+                `https://hedro.ir/api/update_service/${id}/`,
                 {
                     service: service
                 }
@@ -100,7 +100,7 @@ const Consent: React.FC = () => {
         try {
 
             await axios.delete(
-                `http://127.0.0.1:8000/api/delete_service/${personID}/`,
+                `https://hedro.ir/api/delete_service/${personID}/`,
                 {
                     withCredentials: true,
                     data: {
@@ -128,7 +128,7 @@ const Consent: React.FC = () => {
             try {
 
                 const req = await axios.get(
-                    "http://127.0.0.1:8000/api/get_submit_info/"
+                    "https://hedro.ir/api/get_submit_info/"
                 );
 
                 setAfrad(req.data);
@@ -153,7 +153,7 @@ const Consent: React.FC = () => {
 
         const connectWebSocket = () => {
             web.current = new WebSocket(
-                "ws://127.0.0.1:8000/ws/services/getdata/"
+                "wss://hedro.ir/ws/services/getdata/"
             );
 
             web.current.onopen = () => {

@@ -68,7 +68,7 @@ const Client: React.FC = () => {
     useEffect(() => {
 
         const wkurl =
-            "ws://127.0.0.1:8000/ws/services/getdata/";
+            "wss://hedro.ir/ws/services/getdata/";
 
         web.current = new WebSocket(wkurl);
 
@@ -105,7 +105,7 @@ const Client: React.FC = () => {
     const getPeople = async () => {
 
         const rqres = await axios.get(
-            "http://127.0.0.1:8000/api/get_info/"
+            "https://hedro.ir/api/get_info/"
         );
 
         console.log("GET DATA:", rqres.data);
@@ -143,7 +143,7 @@ const Client: React.FC = () => {
             });
 
             const res = await axios.post(
-                "http://127.0.0.1:8000/api/post_info/",
+                "https://hedro.ir/api/post_info/",
                 {
                     ...info,
                     age: Number(info.age),

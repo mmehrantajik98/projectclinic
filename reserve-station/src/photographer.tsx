@@ -32,7 +32,7 @@ const PhotoGraph = () => {
     const getPeople = async () => {
         try {
             const res = await axios.get(
-                "http://127.0.0.1:8000/api/get_submit_info/"
+                "https://hedro.ir/api/get_submit_info/"
             );
 
             setPeople(res.data);
@@ -48,7 +48,7 @@ const PhotoGraph = () => {
     const get_photo = async (personId: number) => {
         try {
             const res = await axios.get(
-                `http://127.0.0.1:8000/api/get_Photos/${personId}/`
+                `https://hedro.ir/api/get_Photos/${personId}/`
             );
 
             const photos: ImageUrl[] = res.data;
@@ -98,7 +98,7 @@ const PhotoGraph = () => {
 
         try {
             await axios.post(
-                `http://127.0.0.1:8000/api/post_image/${personId}/`,
+                `https://hedro.ir/api/post_image/${personId}/`,
                 formData
             );
 
@@ -115,7 +115,7 @@ const PhotoGraph = () => {
     ) => {
         try {
             await axios.delete(
-                `http://127.0.0.1:8000/api/delete_photo/${personId}/${photo}/`
+                `https://hedro.ir/api/delete_photo/${personId}/${photo}/`
             );
 
             await get_photo(personId);
@@ -144,7 +144,7 @@ const PhotoGraph = () => {
 
         try {
             await axios.patch(
-                `http://127.0.0.1:8000/api/patch_photo/${personId}/${photo}/`,
+                `https://hedro.ir/api/patch_photo/${personId}/${photo}/`,
                 formData
             );
 
@@ -232,7 +232,7 @@ const PhotoGraph = () => {
                                                             type: "before"
                                                         })
                                                     }
-                                                    src={`http://127.0.0.1:8000${beforePhoto}`}
+                                                    src={`https://hedro.ir${beforePhoto}`}
                                                     alt="عکس قبل"
                                                 />
                                             </label>
@@ -255,7 +255,7 @@ const PhotoGraph = () => {
 
                                                             <img
                                                                 className="fullIMG"
-                                                                src={`http://127.0.0.1:8000${beforePhoto}`}
+                                                                src={`https://hedro.ir${beforePhoto}`}
                                                                 alt="عکس قبل"
                                                             />
 
@@ -347,7 +347,7 @@ const PhotoGraph = () => {
                                                             type: "after"
                                                         })
                                                     }
-                                                    src={`http://127.0.0.1:8000${afterPhoto}`}
+                                                    src={`https://hedro.ir${afterPhoto}`}
                                                     alt="عکس بعد"
                                                 />
                                             </label>
@@ -370,7 +370,7 @@ const PhotoGraph = () => {
 
                                                             <img
                                                                 className="fullIMG"
-                                                                src={`http://127.0.0.1:8000${afterPhoto}`}
+                                                                src={`https://hedro.ir${afterPhoto}`}
                                                                 alt="عکس بعد"
                                                             />
 

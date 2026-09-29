@@ -23,7 +23,7 @@ const ProtectedRoute: React.FC<children>= ({children, allowedroles}) => {
 
     const getRoles = async ()=>{
         try{
-            const res = await axios.get("http://127.0.0.1:8000/api/getUsers",
+            const res = await axios.get("https://hedro.ir/api/getUsers",
                 {
                     withCredentials:true,
                 }

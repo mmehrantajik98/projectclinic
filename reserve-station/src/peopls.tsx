@@ -50,7 +50,7 @@ const Peoples: React.FC = () => {
             try {
 
                 const res = await axios.get(
-                    "http://127.0.0.1:8000/api/get_submit_info/"
+                    "https://hedro.ir/api/get_submit_info/"
                 );
 
                 context?.setPeople(res.data);
@@ -163,7 +163,7 @@ const Peoples: React.FC = () => {
         try {
 
             await axios.delete(
-                `http://127.0.0.1:8000/api/delete_submit_info/${id}/`
+                `https://hedro.ir/api/delete_submit_info/${id}/`
             );
 
             context.setPeople((prev) =>
@@ -189,7 +189,7 @@ const Peoples: React.FC = () => {
         try {
 
             const up = await axios.patch(
-                `http://127.0.0.1:8000/api/update_submit_info/${id}/`,
+                `https://hedro.ir/api/update_submit_info/${id}/`,
                 {
                     name: args.name,
                     phone: args.phone,

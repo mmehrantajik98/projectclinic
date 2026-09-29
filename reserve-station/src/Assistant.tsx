@@ -30,7 +30,7 @@ const Assistant: React.FC = () => {
     useEffect(() => {
 
         const wkurl =
-            "ws://127.0.0.1:8000/ws/services/getdata/";
+            "wss://hedro.ir/ws/services/getdata/";
 
         web.current = new WebSocket(wkurl);
 
