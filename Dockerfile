@@ -2,16 +2,16 @@ FROM node:24-alpine AS frontend
 
 WORKDIR /frontend
 
-COPY frontend/package*.json ./
+COPY reserve-station/package*.json ./
 
 RUN npm ci
 
-COPY frontend/ .
+COPY reserve-station/ .
 
 RUN npm run build
 
 
-FROM python:3.14-slim AS backend
+FROM python:3.14-slim
 
 WORKDIR /app
 
