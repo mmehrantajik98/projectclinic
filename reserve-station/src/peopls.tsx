@@ -22,9 +22,6 @@ const Peoples: React.FC = () => {
 
     const context = useContext(PeoplesContext);
 
-    const [is_update, setIs_update] =
-        useState<boolean>(!true);
-
     const [upinfo, setUpInfo] = useState<Update>({
         name: "",
         age: 0,
@@ -189,8 +186,6 @@ const Peoples: React.FC = () => {
         args: Update
     ) => {
 
-        setIs_update(true);
-
         try {
 
             const up = await axios.patch(
@@ -216,8 +211,6 @@ const Peoples: React.FC = () => {
                         : person
                 )
             );
-
-            setIs_update(false);
             setUserId(null);
 
         } catch (error) {
@@ -488,10 +481,6 @@ const Peoples: React.FC = () => {
                                                     person.id
                                                 ) {
 
-                                                    setIs_update(
-                                                        false
-                                                    );
-
                                                     setUserId(
                                                         null
                                                     );
@@ -501,11 +490,7 @@ const Peoples: React.FC = () => {
                                                     setUserId(
                                                         person.id
                                                     );
-
-                                                    setIs_update(
-                                                        true
-                                                    );
-
+                                                    
                                                     setUpInfo({
                                                         name: person.name,
                                                         age: person.age,
