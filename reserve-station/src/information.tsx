@@ -32,7 +32,6 @@ const PersonInfo: React.FC = () => {
     const [photos, setPhotos] = useState<Photos[]>([]);
 
     const [loading, setLoading] = useState(true);
-    const [photosLoading, setPhotosLoading] = useState(true);
 
     const [openGallery, setOpenGallery] = useState(false);
     const [addPhoto, setAddPhoto] = useState(false);
@@ -74,8 +73,6 @@ const PersonInfo: React.FC = () => {
 
         try {
 
-            setPhotosLoading(true);
-
             const res = await axios.get(
                 `${API}/api/get_Photos/${id}/`
             );
@@ -86,10 +83,6 @@ const PersonInfo: React.FC = () => {
 
             console.log(error);
             setPhotos([]);
-
-        } finally {
-
-            setPhotosLoading(false);
 
         }
     };
