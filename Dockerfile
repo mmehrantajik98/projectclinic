@@ -13,27 +13,28 @@ RUN npm run build
 
 FROM python:3.14-slim
 
-WORKDIR /app
-
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-RUN apt-get update && \
-    apt-get install -y nginx && \
-    rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    nginx \
+    supervisor \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY backend/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY backend/ .
+COPY backend/ /app/
 
-COPY --from=frontend /frontend/dist /app/frontend_dist
+COPY --from=frontend /frontend/dist /usr/share/nginx/html
 
-COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-RUN rm -f /etc/nginx/sites-enabled/default
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 80
 
-CMD ["sh", "-c", "daphne -b 127.0.0.1 -p 8000 backend.asgi:application & nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
