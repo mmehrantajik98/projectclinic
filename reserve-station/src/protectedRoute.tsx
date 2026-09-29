@@ -1,66 +1,81 @@
 import axios from "axios";
 import type React from "react";
-import { createContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-interface children{
+interface children {
     children: React.ReactNode;
     allowedroles: string[];
 }
 
-interface UserRole{
-    username: string,
-    role: string,
+interface UserRole {
+    username: string;
+    role: string;
 }
 
 export const UserContext = createContext<UserRole | null>(null);
 
-const ProtectedRoute: React.FC<children>= ({children, allowedroles}) => {
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-    const [users, setUsers] = useState<UserRole | null>(null)
+    const [users, setUsers] = useState<UserRole | null>(null);
 
-    const navigate = useNavigate()
+    useEffect(() => {
 
-    const getRoles = async ()=>{
-        try{
-            const res = await axios.get("https://hedro.ir/api/getUsers",
-                {
-                    withCredentials:true,
-                }
-            )
-            setUsers({
-                ...users,
-                username: res.data.username,
-                role: res.data.role,
-            })
-        }catch(e){
-            console.log(e)
-        }
-    }
+        const getRoles = async () => {
 
-     useEffect(() => {
+            try {
+
+                const res = await axios.get(
+                    "https://hedro.ir/api/getUsers",
+                    {
+                        withCredentials: true,
+                    }
+                );
+
+                setUsers({
+                    username: res.data.username,
+                    role: res.data.role,
+                });
+
+            } catch (e) {
+
+                console.log(e);
+
+            }
+
+        };
+
         getRoles();
+
     }, []);
 
-    if (!users){
-        return
-    }
-
-    if (users.role === "CEO" || users.role === "marketing") {
-        return <>{children}</>;
-    }
-
-    if (!allowedroles.includes(users.role)){
-        navigate("/", {replace:true})
-        return <h1>شما دسترسی به صفحه مورد نظر را ندارید!</h1>
-    }
-
-    return ( 
+    return (
         <UserContext.Provider value={users}>
             {children}
         </UserContext.Provider>
     );
+};
 
-}
- 
+const ProtectedRoute: React.FC<children> = ({ children, allowedroles }) => {
+
+    const user = useContext(UserContext);
+
+    const navigate = useNavigate();
+
+    if (!user) {
+        return null;
+    }
+
+    if (user.role === "CEO" || user.role === "marketing") {
+        return <>{children}</>;
+    }
+
+    if (!allowedroles.includes(user.role)) {
+        navigate("/", { replace: true });
+        return <h1>شما دسترسی به صفحه مورد نظر را ندارید!</h1>;
+    }
+
+    return <>{children}</>;
+};
+
 export default ProtectedRoute;

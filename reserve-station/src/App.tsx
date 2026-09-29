@@ -13,71 +13,105 @@ import PhotoGraph from "./photographer";
 import Login from "./login";
 import Sign from "./sign";
 import Dashboard from "./dashboard";
-import ProtectedRoute from "./protectedRoute";
+import ProtectedRoute, { UserProvider } from "./protectedRoute";
 
 const App = () => {
     return (
 
-        <PeopleProvider>
-        <CallCenterContext>
-            <Layout>
-                <Routes>
+        <UserProvider>
 
-                    <Route path="/" element={<Dashboard />} />
+            <PeopleProvider>
 
-                    <Route path="/Client" element={<Client />} />
-                   
-                    <Route path="/peoples" element={<Peoples />} />
+                <CallCenterContext>
 
-                    <Route path="/login" element={<Login />} />
+                    <Layout>
 
-                    
-                        <Route path="/consent" element={
-                            <ProtectedRoute allowedroles={["Consent"]}>
-                                <Consent />
-                            </ProtectedRoute>
-                        } />
-                    
+                        <Routes>
 
-                   
-                        <Route path="/Assistant" element={
-                            <ProtectedRoute allowedroles={["Assistant"]}>
-                                <Assistant />
-                            </ProtectedRoute>
-                        } />
-                    
+                            <Route
+                                path="/"
+                                element={<Dashboard />}
+                            />
 
-                    <Route path="/sign" element={<Sign />} />  
+                            <Route
+                                path="/Client"
+                                element={<Client />}
+                            />
 
-                   
-                        <Route path="/photographer" element={
-                            <ProtectedRoute allowedroles={["photographer"]}>
-                                <PhotoGraph />
-                            </ProtectedRoute>
-                        } />
-                    
+                            <Route
+                                path="/peoples"
+                                element={<Peoples />}
+                            />
 
-                    
-                        <Route path="/callcenter" element={
-                            <ProtectedRoute allowedroles={["callcenter"]}>
-                                <CallCenter />
-                            </ProtectedRoute>
-                            } />
+                            <Route
+                                path="/login"
+                                element={<Login />}
+                            />
 
-                        <Route path="/callcentertable" element={
-                            <ProtectedRoute allowedroles={["callcenter"]}>
-                                <CallCenterTable /> 
-                            </ProtectedRoute>
-                        } />
-                   
+                            <Route
+                                path="/consent"
+                                element={
+                                    <ProtectedRoute allowedroles={["Consent"]}>
+                                        <Consent />
+                                    </ProtectedRoute>
+                                }
+                            />
 
-                    <Route path="/peoples/:id" element={<PersonInfo />} />
-                    
-                </Routes>
-            </Layout>
-        </CallCenterContext>
-        </PeopleProvider>
+                            <Route
+                                path="/Assistant"
+                                element={
+                                    <ProtectedRoute allowedroles={["Assistant"]}>
+                                        <Assistant />
+                                    </ProtectedRoute>
+                                }
+                            />
 
+                            <Route
+                                path="/sign"
+                                element={<Sign />}
+                            />
+
+                            <Route
+                                path="/photographer"
+                                element={
+                                    <ProtectedRoute allowedroles={["photographer"]}>
+                                        <PhotoGraph />
+                                    </ProtectedRoute>
+                                }
+                            />
+
+                            <Route
+                                path="/callcenter"
+                                element={
+                                    <ProtectedRoute allowedroles={["callcenter"]}>
+                                        <CallCenter />
+                                    </ProtectedRoute>
+                                }
+                            />
+
+                            <Route
+                                path="/callcentertable"
+                                element={
+                                    <ProtectedRoute allowedroles={["callcenter"]}>
+                                        <CallCenterTable />
+                                    </ProtectedRoute>
+                                }
+                            />
+
+                            <Route
+                                path="/peoples/:id"
+                                element={<PersonInfo />}
+                            />
+
+                        </Routes>
+
+                    </Layout>
+
+                </CallCenterContext>
+
+            </PeopleProvider>
+
+        </UserProvider>
     );
 };
 
