@@ -53,7 +53,7 @@ const CallCenter: React.FC = () => {
 
     useEffect(() => {
         const wkurl =
-            "ws://hedro.ir/ws/services/getdata/";
+            "wss://hedro.ir/ws/services/getdata/";
 
         web.current = new WebSocket(wkurl);
 
