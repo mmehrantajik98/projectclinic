@@ -1,11 +1,25 @@
-.layout {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+layout {
     width: 100%;
+    min-height: 100vh;
     padding: 24px;
-    direction: rtl;
+
     box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    background: #0b0d10;
+}
+
+.layout-body {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+
+    direction: rtl;
 }
 
 .layout-content {
