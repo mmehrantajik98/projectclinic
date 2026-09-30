@@ -1,7 +1,6 @@
 import axios from "axios";
 import type React from "react";
 import { useState, useEffect, createContext } from "react";
-import { useNavigate } from "react-router-dom";
 
 interface Children {
     children: React.ReactNode;
@@ -30,8 +29,6 @@ const ProtectedLogin: React.FC<Children> = ({ children }) => {
         username: "",
         username_id: 0
     });
-
-    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -80,8 +77,9 @@ const ProtectedLogin: React.FC<Children> = ({ children }) => {
 
             setIsAuth(false);
 
-            navigate("/login", {
-                replace: true
+            setCurrentUser({
+                username: "",
+                username_id: 0
             });
 
         } catch (e) {

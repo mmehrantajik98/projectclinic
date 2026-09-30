@@ -15,109 +15,67 @@ import Sign from "./sign";
 import Dashboard from "./dashboard";
 import ProtectedRoute, { UserProvider } from "./protectedRoute";
 import AuthUser from "./authUser";
+import ProtectedLogin from "./protectedLogin";
 
 
 const App = () => {
-    return (
+ return (
+        <ProtectedLogin>
 
-        <AuthUser>
+            <Routes>
 
-        <UserProvider>
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
 
-            <PeopleProvider>
+                <Route
+                    path="*"
+                    element={
+                        <AuthUser>
 
-                <CallCenterContext>
+                            <UserProvider>
 
-                    <Layout>
+                                <PeopleProvider>
 
-                        <Routes>
+                                    <CallCenterContext>
 
-                            <Route
-                                path="/"
-                                element={<Dashboard />}
-                            />
+                                        <Layout>
 
-                            <Route
-                                path="/Client"
-                                element={<Client />}
-                            />
+                                            <Routes>
 
-                            <Route
-                                path="/peoples"
-                                element={<Peoples />}
-                            />
+                                                <Route
+                                                    path="/"
+                                                    element={<Dashboard />}
+                                                />
 
-                            <Route
-                                path="/login"
-                                element={<Login />}
-                            />
+                                                <Route
+                                                    path="/Client"
+                                                    element={<Client />}
+                                                />
 
-                            <Route
-                                path="/consent"
-                                element={
-                                    <ProtectedRoute allowedroles={["Consent"]}>
-                                        <Consent />
-                                    </ProtectedRoute>
-                                }
-                            />
+                                                <Route
+                                                    path="/peoples"
+                                                    element={<Peoples />}
+                                                />
 
-                            <Route
-                                path="/Assistant"
-                                element={
-                                    <ProtectedRoute allowedroles={["Assistant"]}>
-                                        <Assistant />
-                                    </ProtectedRoute>
-                                }
-                            />
+                                            </Routes>
 
-                            <Route
-                                path="/sign"
-                                element={<Sign />}
-                            />
+                                        </Layout>
 
-                            <Route
-                                path="/photographer"
-                                element={
-                                    <ProtectedRoute allowedroles={["photographer"]}>
-                                        <PhotoGraph />
-                                    </ProtectedRoute>
-                                }
-                            />
+                                    </CallCenterContext>
 
-                            <Route
-                                path="/callcenter"
-                                element={
-                                    <ProtectedRoute allowedroles={["callcenter"]}>
-                                        <CallCenter />
-                                    </ProtectedRoute>
-                                }
-                            />
+                                </PeopleProvider>
 
-                            <Route
-                                path="/callcentertable"
-                                element={
-                                    <ProtectedRoute allowedroles={["callcenter"]}>
-                                        <CallCenterTable />
-                                    </ProtectedRoute>
-                                }
-                            />
+                            </UserProvider>
 
-                            <Route
-                                path="/peoples/:id"
-                                element={<PersonInfo />}
-                            />
+                        </AuthUser>
+                    }
+                />
 
-                        </Routes>
+            </Routes>
 
-                    </Layout>
-
-                </CallCenterContext>
-
-            </PeopleProvider>
-
-        </UserProvider>
-
-        </AuthUser>
+        </ProtectedLogin>
     );
 };
 
