@@ -8,7 +8,15 @@ import { authContext } from "./protectedLogin";
 const Aside: React.FC = () => {
 
     const user = useContext(UserContext);
-    const auth = useContext(authContext)
+    const auth = useContext(authContext);
+
+    const handleLogout = async () => {
+
+        if (auth) {
+            await auth.logOut();
+        }
+
+    };
 
     return (
         <aside className="sidebar">
@@ -44,7 +52,9 @@ const Aside: React.FC = () => {
                     </>
                 )}
 
-                <button onClick={()=> auth?.logOut()}>خروج</button>
+                <button onClick={handleLogout}>
+                    خروج
+                </button>
 
             </nav>
         </aside>
