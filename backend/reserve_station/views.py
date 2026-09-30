@@ -436,23 +436,21 @@ def protectedAuth(request):
 @api_view(["POST"])
 def Logout(request):
 
-    access_token = request.COOKIES.get("access_token")
-    refresh_token = request.COOKIES.get("refresh_token")
-
-    if not access_token and not refresh_token:
-        
-        print(f"{request.user} havent cookie")
-        return Response({
-            "error": f"{request.user} havent cookie"
-        })
-        return None 
-
-    response= Response({
+    response = Response({
         "success_logout": "logoutSuccessfully!"
     })
 
-    response.delete_cookie("access_token")
-    response.delete_cookie("refresh_token")
+    response.delete_cookie(
+        "access",
+        samesite="None"
+    )
+
+    response.delete_cookie(
+        "refresh",
+        samesite="None"
+    )
+
+    return response
 
 class CreateTokenCookie(TokenObtainPairView):
 
