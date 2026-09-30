@@ -11,6 +11,7 @@ from datetime import timedelta
 from rest_framework.parsers import MultiPartParser, FormParser 
 from rest_framework.decorators import api_view, parser_classes
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
 @api_view(["POST"])
