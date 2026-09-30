@@ -2,6 +2,7 @@ import axios from "axios";
 import type React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { authContext } from "./protectedLogin";
 
 interface children {
     children: React.ReactNode;
@@ -19,7 +20,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const [users, setUsers] = useState<UserRole | null>(null);
 
+    const auth = useContext(authContext);
+
     useEffect(() => {
+
+        if (auth?.isAuth !== true) {
+            return;
+        }
 
         const getRoles = async () => {
 
@@ -47,7 +54,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         getRoles();
 
-    }, []);
+    }, [auth?.isAuth]);
 
     return (
         <UserContext.Provider value={users}>
