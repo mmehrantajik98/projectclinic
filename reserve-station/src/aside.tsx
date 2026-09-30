@@ -46,6 +46,8 @@ const Aside: React.FC<Props> = () => {
                     </>
                 )}
 
+                <button>خروج</button>
+
             </nav>
         </aside>
     );

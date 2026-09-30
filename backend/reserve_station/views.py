@@ -418,6 +418,26 @@ def getUsers(request):
         "role": user.role
     })
 
+@api_view(["POST"])
+def getUsers(request):
+
+    access_token = request.COOKIES.get("access_token")
+    refresh_token = request.COOKIES.get("refresh_token")
+
+    if not access_token and not refresh_token:
+        
+        print(f"{request.user} havent cookie")
+        return Response({
+            "error": f"{request.user} havent cookie"
+        })
+        return None 
+
+    response= Response({
+        "success_logout": "logoutSuccessfully!"
+    })
+
+    response.delete_cookie("access_token")
+    response.delete_cookie("refresh_token")
 
 class CreateTokenCookie(TokenObtainPairView):
 
