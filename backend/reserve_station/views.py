@@ -11,6 +11,7 @@ from datetime import timedelta
 from rest_framework.parsers import MultiPartParser, FormParser 
 from rest_framework.decorators import api_view, parser_classes
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(["POST"])
 def Post_Info(request):
@@ -418,8 +419,21 @@ def getUsers(request):
         "role": user.role
     })
 
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def protectedAuth(request):
+
+    return Response({
+        "authenticate": True,
+        "username": request.user.username,
+        "username_id": request.user.id,
+        "iavatar": request.user.avatar.url if request.user.avatar else None,
+    })
+    
+   
 @api_view(["POST"])
-def getUsers(request):
+def Logout(request):
 
     access_token = request.COOKIES.get("access_token")
     refresh_token = request.COOKIES.get("refresh_token")

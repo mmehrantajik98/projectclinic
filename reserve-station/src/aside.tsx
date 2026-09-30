@@ -3,14 +3,12 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "./protectedRoute";
 import "./aside.css";
+import { authContext } from "./protectedLogin";
 
-interface Props {}
-
-const Aside: React.FC<Props> = () => {
+const Aside: React.FC = () => {
 
     const user = useContext(UserContext);
-    console.log("USER:", user);
-    console.log("ROLE:", user?.role);
+    const auth = useContext(authContext)
 
     return (
         <aside className="sidebar">
@@ -46,7 +44,7 @@ const Aside: React.FC<Props> = () => {
                     </>
                 )}
 
-                <button>خروج</button>
+                <button onClick={()=> auth?.logOut()}>خروج</button>
 
             </nav>
         </aside>

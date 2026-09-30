@@ -14,9 +14,13 @@ import Login from "./login";
 import Sign from "./sign";
 import Dashboard from "./dashboard";
 import ProtectedRoute, { UserProvider } from "./protectedRoute";
+import AuthUser from "./authUser";
+
 
 const App = () => {
     return (
+
+        <AuthUser>
 
         <UserProvider>
 
@@ -112,6 +116,8 @@ const App = () => {
             </PeopleProvider>
 
         </UserProvider>
+
+        </AuthUser>
     );
 };
 

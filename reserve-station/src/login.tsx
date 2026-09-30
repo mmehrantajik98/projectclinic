@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./login.css";
 import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { authContext } from "./protectedLogin";
 
 interface Users {
     username: string;
@@ -17,6 +18,8 @@ const Login = () => {
     });
 
     const navigate = useNavigate()
+
+    const auth = useContext(authContext)
 
     const [error, setError] = useState<Yup.ValidationError | null>(null);
 
@@ -51,6 +54,7 @@ const Login = () => {
 
             
             console.log(res.data);
+            auth?.setIsAuth(true)
             navigate("/", {replace:true})
 
         } catch (e) {
@@ -60,7 +64,9 @@ const Login = () => {
                 return;
             }
 
+            auth?.setIsAuth(false)
             console.log(e);
+            
         }
     };
 
