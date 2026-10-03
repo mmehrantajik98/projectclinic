@@ -21,7 +21,7 @@ const Login = () => {
 
     const auth = useContext(authContext)
 
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState(false)
 
     const [error, setError] = useState<Yup.ValidationError | null>(null);
 
@@ -36,47 +36,18 @@ const Login = () => {
             .matches(/[0-9]/, "حداقل باید یک عدد داشته باشد")
     });
 
-    const submit_form = async ()=>{
-
-        try{
-
-            await schema.validate(users, {
-                abortEarly: false
-
-            });
-
-            return schema;
-
-        }catch(e){
-
-            if (e instanceof Yup.ValidationError) {
-                setError(e);
-                return;
-            }else{
-                setError(null)
-            }
-
-        }
-         
-    }
-
     const handleSubmit = async (e: React.FormEvent) => {
+
         e.preventDefault();
 
         try {
-
-           const validate = await submit_form()
-
-            if (validate){
-              return
-            }
-
-            setLoading(true)
-            const promis = await new Promise((validate)=> setTimeout(validate, 300))
-            setLoading(false)
+            await schema.validate(users, {
+                abortEarly: false
+            });
 
             setError(null);
 
+            setLoading(true)
             const res = await axios.post(
                 "https://hedro.ir/api/login/",
                 users,
@@ -84,6 +55,7 @@ const Login = () => {
                     withCredentials: true
                 }
             );
+
             
             console.log(res.data);
             auth?.setIsAuth(true)
@@ -91,9 +63,16 @@ const Login = () => {
 
         } catch (e) {
 
+            if (e instanceof Yup.ValidationError) {
+                setError(e);
+                return;
+            }
+
             auth?.setIsAuth(false)
             console.log(e);
             
+        }finally{
+            setLoading(false)
         }
     };
 
@@ -145,7 +124,10 @@ const Login = () => {
                     <span>{getError("password")}</span>
                 )}
 
-                <button type="submit">
+                <button
+                    type="submit"
+                    disabled={loading}
+                >
                     {loading ? "در حال بررسی..." : "ورود"}
                 </button>
                 
