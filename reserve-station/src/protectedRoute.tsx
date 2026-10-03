@@ -1,7 +1,6 @@
 import axios from "axios";
 import type React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { authContext } from "./protectedLogin";
 import { Navigate } from "react-router-dom";
 
@@ -68,7 +67,6 @@ const ProtectedRoute: React.FC<children> = ({ children, allowedroles }) => {
 
     const user = useContext(UserContext);
 
-    const navigate = useNavigate();
 
     if (!user) {
         return null;
@@ -80,7 +78,6 @@ const ProtectedRoute: React.FC<children> = ({ children, allowedroles }) => {
 
     if (!allowedroles.includes(user.role)) {
         return <Navigate to="/login" replace />;
-        return <h1>شما دسترسی به صفحه مورد نظر را ندارید!</h1>;
     }
 
     return <>{children}</>;
