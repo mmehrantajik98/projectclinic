@@ -36,21 +36,44 @@ const Login = () => {
             .matches(/[0-9]/, "حداقل باید یک عدد داشته باشد")
     });
 
+    const submit_form = async ()=>{
+
+        try{
+
+            await schema.validate(users, {
+                abortEarly: false
+
+            });
+
+            return schema;
+
+        }catch(e){
+
+            if (e instanceof Yup.ValidationError) {
+                setError(e);
+                return;
+            }else{
+                setError(null)
+            }
+
+        }
+         
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
 
-            const valid = await schema.validate(users, {
-                abortEarly: false
-            });
+           const validate = await submit_form()
 
-            if (valid){
-                setLoading(true)
-                await new Promise((reolve)=>{
-                    setTimeout(reolve, 500);
-                })
+            if (validate){
+              return
             }
+
+            setLoading(true)
+            const promis = await new Promise((validate)=> setTimeout(validate, 300))
+            setLoading(false)
 
             setError(null);
 
@@ -68,16 +91,9 @@ const Login = () => {
 
         } catch (e) {
 
-            if (e instanceof Yup.ValidationError) {
-                setError(e);
-                return;
-            }
-
             auth?.setIsAuth(false)
             console.log(e);
             
-        }finally{
-            setLoading(false)
         }
     };
 
