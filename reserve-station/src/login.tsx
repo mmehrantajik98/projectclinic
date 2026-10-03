@@ -37,46 +37,43 @@ const Login = () => {
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-        e.preventDefault();
-        setLoading(true)
+    try {
+        await schema.validate(users, {
+            abortEarly: false
+        });
 
-        try {
-            
-            await schema.validate(users, {
-                abortEarly: false
-            });
+        setError(null);
+        setLoading(true);
 
-            setError(null);
-
-            
-            const res = await axios.post(
-                "https://hedro.ir/api/login/",
-                users,
-                {
-                    withCredentials: true
-                }
-            );
-
-            
-            console.log(res.data);
-            auth?.setIsAuth(true)
-            navigate("/", {replace:true})
-
-        } catch (e) {
-
-            if (e instanceof Yup.ValidationError) {
-                setError(e);
-                return;
+        const res = await axios.post(
+            "https://hedro.ir/api/login/",
+            users,
+            {
+                withCredentials: true
             }
+        );
 
-            auth?.setIsAuth(false)
-            console.log(e);
-            
-        }finally{
-            setLoading(false)
+        console.log(res.data);
+
+        auth?.setIsAuth(true);
+        navigate("/", { replace: true });
+
+    } catch (e) {
+
+        if (e instanceof Yup.ValidationError) {
+            setError(e);
+            return;
         }
-    };
+
+        auth?.setIsAuth(false);
+        console.log(e);
+
+    } finally {
+        setLoading(false);
+    }
+};
 
     const getError = (field: string) => {
         return error?.inner.find(
