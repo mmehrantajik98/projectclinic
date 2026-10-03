@@ -3,6 +3,7 @@ import type React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authContext } from "./protectedLogin";
+import { Navigate } from "react-router-dom";
 
 interface children {
     children: React.ReactNode;
@@ -78,7 +79,7 @@ const ProtectedRoute: React.FC<children> = ({ children, allowedroles }) => {
     }
 
     if (!allowedroles.includes(user.role)) {
-        navigate("/", { replace: true });
+        return <Navigate to="/login" replace />;
         return <h1>شما دسترسی به صفحه مورد نظر را ندارید!</h1>;
     }
 

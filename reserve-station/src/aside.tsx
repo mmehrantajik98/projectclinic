@@ -54,7 +54,7 @@ const Aside: React.FC = () => {
 
                 {(user?.role === "CEO" ||
                     user?.role === "marketing" ||
-                    user?.role === "callcenter") && (
+                    user?.role === "reception") && (
                     
                         <Link to="/reception">پذیرش</Link>
                     
