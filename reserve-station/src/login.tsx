@@ -17,11 +17,11 @@ const Login = () => {
         password: "",
     });
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
-    const auth = useContext(authContext)
+    const auth = useContext(authContext);
 
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
 
     const [error, setError] = useState<Yup.ValidationError | null>(null);
 
@@ -37,56 +37,68 @@ const Login = () => {
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
 
-    try {
-        await schema.validate(users, {
-            abortEarly: false
-        });
+        e.preventDefault();
 
-        setError(null);
         setLoading(true);
+        setError(null);
 
-        const res = await axios.post(
-            "https://hedro.ir/api/login/",
-            users,
-            {
-                withCredentials: true
+        try {
+
+            await schema.validate(users, {
+                abortEarly: false
+            });
+
+            const res = await axios.post(
+                "https://hedro.ir/api/login/",
+                users,
+                {
+                    withCredentials: true
+                }
+            );
+
+            console.log(res.data);
+
+            auth?.setIsAuth(true);
+
+            navigate("/", {
+                replace: true
+            });
+
+        } catch (e) {
+
+            if (e instanceof Yup.ValidationError) {
+                setError(e);
+                return;
             }
-        );
 
-        console.log(res.data);
+            auth?.setIsAuth(false);
 
-        auth?.setIsAuth(true);
-        navigate("/", { replace: true });
+            console.log(e);
 
-    } catch (e) {
+        } finally {
 
-        if (e instanceof Yup.ValidationError) {
-            setError(e);
-            return;
+            setLoading(false);
+
         }
-
-        auth?.setIsAuth(false);
-        console.log(e);
-
-    } finally {
-        setLoading(false);
-    }
-};
+    };
 
     const getError = (field: string) => {
+
         return error?.inner.find(
             (item) => item.path === field
         )?.message;
+
     };
 
     return (
         <div className="login-container">
+
             <form
                 className="login-form"
                 onSubmit={handleSubmit}
             >
+
                 <h2>ورود به حساب کاربری</h2>
 
                 <input
@@ -94,6 +106,7 @@ const Login = () => {
                     name="username"
                     placeholder="نام کاربری"
                     value={users.username}
+                    disabled={loading}
                     onChange={(e) =>
                         setUsers({
                             ...users,
@@ -103,7 +116,9 @@ const Login = () => {
                 />
 
                 {getError("username") && (
-                    <span>{getError("username")}</span>
+                    <span>
+                        {getError("username")}
+                    </span>
                 )}
 
                 <input
@@ -111,6 +126,7 @@ const Login = () => {
                     name="password"
                     placeholder="پسورد"
                     value={users.password}
+                    disabled={loading}
                     onChange={(e) =>
                         setUsers({
                             ...users,
@@ -120,7 +136,9 @@ const Login = () => {
                 />
 
                 {getError("password") && (
-                    <span>{getError("password")}</span>
+                    <span>
+                        {getError("password")}
+                    </span>
                 )}
 
                 <button
@@ -129,8 +147,9 @@ const Login = () => {
                 >
                     {loading ? "در حال بررسی..." : "ورود"}
                 </button>
-                
+
             </form>
+
         </div>
     );
 };
