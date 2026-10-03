@@ -1,6 +1,5 @@
 import {useEffect, useState } from "react"
 import axios from "axios";
-import "./Reception.css";
 
 interface names {
     name: string,
