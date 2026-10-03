@@ -39,15 +39,17 @@ const Login = () => {
     const handleSubmit = async (e: React.FormEvent) => {
 
         e.preventDefault();
+        setLoading(true)
 
         try {
+            
             await schema.validate(users, {
                 abortEarly: false
             });
 
             setError(null);
 
-            setLoading(true)
+            
             const res = await axios.post(
                 "https://hedro.ir/api/login/",
                 users,
