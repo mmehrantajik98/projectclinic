@@ -85,7 +85,11 @@ const App = () => {
 
                                         <Route
                                             path="/sign"
-                                            element={<Sign />}
+                                            element={
+                                            <ProtectedRoute allowedroles={["CEO", "marketing"]}>
+                                                <Sign />
+                                            </ProtectedRoute>
+                                            }
                                         />
 
                                         <Route
@@ -110,6 +114,15 @@ const App = () => {
                                             path="/callcentertable"
                                             element={
                                                 <ProtectedRoute allowedroles={["callcenter"]}>
+                                                    <CallCenterTable />
+                                                </ProtectedRoute>
+                                            }
+                                        />
+
+                                         <Route
+                                            path="/callcentertable"
+                                            element={
+                                                <ProtectedRoute allowedroles={["reception", "CEO", "marketing"]}>
                                                     <CallCenterTable />
                                                 </ProtectedRoute>
                                             }

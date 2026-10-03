@@ -1,5 +1,6 @@
 import {useEffect, useState } from "react"
 import axios from "axios";
+import './Reception.css'
 
 interface names {
     name: string,
@@ -7,9 +8,7 @@ interface names {
 
 const Reception = () => {
 
-    const [name, setName] = useState<names | null>({
-        name: "",
-    })
+    const [name, setName] = useState<names[] | null>([])
 
     useEffect(() => {
 
@@ -65,42 +64,38 @@ const Reception = () => {
                         </tr>
                     </thead>
 
-                    <tbody>
+                        <tbody>
+                            {name?.map((person, index) => (
+                                <tr key={index}>
 
-                        <tr>
+                                    <td className="person-name">
+                                        {person.name}
+                                    </td>
 
-                            <td className="person-name">
-                                {name?.name}
-                            </td>
+                                    <td>
+                                        <div className="status-buttons">
 
-                            <td>
+                                            <button className="arrived">
+                                                امروز اومده
+                                            </button>
 
-                                <div className="status-buttons">
+                                            <button className="not-arrived">
+                                                امروز نیومده
+                                            </button>
 
-                                    <button className="arrived">
-                                        امروز اومده
-                                    </button>
+                                        </div>
+                                    </td>
 
-                                    <button className="not-arrived">
-                                        امروز نیومده
-                                    </button>
+                                    <td>
+                                        <button className="consultation-btn">
+                                            هدایت به اتاق مشاوره
+                                            <span>←</span>
+                                        </button>
+                                    </td>
 
-                                </div>
-
-                            </td>
-
-                            <td>
-
-                                <button className="consultation-btn">
-                                    هدایت به اتاق مشاوره
-                                    <span>←</span>
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-                    </tbody>
+                                </tr>
+                            ))}
+                        </tbody>
 
                 </table>
 

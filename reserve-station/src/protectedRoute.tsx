@@ -77,7 +77,7 @@ const ProtectedRoute: React.FC<children> = ({ children, allowedroles }) => {
     }
 
     if (!allowedroles.includes(user.role)) {
-        return <Navigate to="/login" replace />;
+        return <h1>شما اجازه ورود ندارید</h1>
     }
 
     return <>{children}</>;
