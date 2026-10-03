@@ -15,6 +15,7 @@ const Aside: React.FC = () => {
         if (auth) {
             await auth.logOut();
         }
+        console.log("ROLE:", user?.role);
 
     };
 
