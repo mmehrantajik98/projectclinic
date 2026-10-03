@@ -26,7 +26,7 @@ const Aside: React.FC = () => {
                     user?.role === "marketing" ||
                     user?.role === "reception") && (
                     <>
-                        <Link to="/">ثبت اطلاعات</Link>
+                        <Link to="/">مراجعین</Link>
                         <Link to="/peoples">جدول پذیرش</Link>
                     </>
                 )}
@@ -49,6 +49,14 @@ const Aside: React.FC = () => {
                     <>
                         <Link to="/callcenter">کال سنتر</Link>
                         <Link to="/callcentertable">جدول کال سنتر</Link>
+                    </>
+                )}
+
+                {(user?.role === "CEO" ||
+                    user?.role === "marketing" ||
+                    user?.role === "callcenter") && (
+                    <>
+                        <Link to="/reception">پذیرش</Link>
                     </>
                 )}
 
