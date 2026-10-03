@@ -16,6 +16,7 @@ import Dashboard from "./dashboard";
 import ProtectedRoute, { UserProvider } from "./protectedRoute";
 import AuthUser from "./authUser";
 import ProtectedLogin from "./protectedLogin";
+import Reception from "./reception";
 
 
 const App = () => {
@@ -57,6 +58,11 @@ const App = () => {
                                         <Route
                                             path="/peoples"
                                             element={<Peoples />}
+                                        />
+                                        
+                                        <Route
+                                            path="/reception"
+                                            element={<Reception />}
                                         />
 
                                         <Route

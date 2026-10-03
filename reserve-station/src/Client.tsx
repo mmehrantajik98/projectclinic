@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useState, useEffect, useRef } from "react";
-import "./reception.css";
+import "./Client.css";
 import * as Yup from "yup";
 import { contextCon } from "./callcenterContexts";
 
