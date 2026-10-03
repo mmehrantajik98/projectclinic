@@ -21,6 +21,8 @@ const Login = () => {
 
     const auth = useContext(authContext)
 
+    const [loading, setLoading] = useState<boolean>(false)
+
     const [error, setError] = useState<Yup.ValidationError | null>(null);
 
     const schema = Yup.object({
@@ -38,9 +40,17 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            await schema.validate(users, {
+
+            const valid = await schema.validate(users, {
                 abortEarly: false
             });
+
+            if (valid){
+                setLoading(true)
+                await new Promise((reolve)=>{
+                    setTimeout(reolve, 500);
+                })
+            }
 
             setError(null);
 
@@ -51,7 +61,6 @@ const Login = () => {
                     withCredentials: true
                 }
             );
-
             
             console.log(res.data);
             auth?.setIsAuth(true)
@@ -67,6 +76,8 @@ const Login = () => {
             auth?.setIsAuth(false)
             console.log(e);
             
+        }finally{
+            setLoading(false)
         }
     };
 
@@ -119,7 +130,7 @@ const Login = () => {
                 )}
 
                 <button type="submit">
-                    ورود
+                    {loading ? "در حال بررسی..." : "ورود"}
                 </button>
                 
             </form>
