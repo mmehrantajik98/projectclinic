@@ -454,7 +454,7 @@ def Logout(request):
 @api_view(["GET"])
 def getNames(request):
 
-    model = Personal.objects.all()
+    model = SubmitPersonal.objects.all()
 
     data = [
         {
