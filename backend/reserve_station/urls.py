@@ -11,6 +11,7 @@ urlpatterns = [
     path("postUsers/", views.Sign, name="sign up users"),
     path("getUsers/", views.getUsers, name="get users"),
     path("check_Auth/", views.protectedAuth, name="Protected Authenticate"),
+    path("get_name/", views.getNames, name="get names submit personals"),
     path("Logout/", views.Logout, name="logout and del cookies"),
     path("login/", views.CreateTokenCookie.as_view(), name="login users"),
     path("delete_service/<int:person_id>/", views.Delete_Servies, name="Delete Servies"),

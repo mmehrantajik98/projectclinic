@@ -4,11 +4,12 @@ import './Reception.css'
 
 interface names {
     name: string,
+    id: number,
 }
 
 const Reception = () => {
 
-    const [name, setName] = useState<names[] | null>([])
+    const [name, setName] = useState<names[]>([])
 
     useEffect(() => {
 
@@ -17,10 +18,10 @@ const Reception = () => {
             try {
 
                 const res = await axios.get(
-                    "https://hedro.ir/api/get_submit_info/"
+                    "https://hedro.ir/api/get_name/"
                 );
 
-                setName(res.data)
+                setName(res.data);
 
             } catch (error) {
 
@@ -40,6 +41,7 @@ const Reception = () => {
         <div className="reception">
 
             <div className="reception-header">
+
                 <div>
                     <h1>پذیرش</h1>
                     <p>مدیریت مراجعه‌کنندگان امروز</p>
@@ -47,8 +49,9 @@ const Reception = () => {
 
                 <div className="reception-count">
                     <span>تعداد مراجعه‌کنندگان</span>
-                    <strong>1</strong>
+                    <strong>{name.length}</strong>
                 </div>
+
             </div>
 
 
@@ -57,45 +60,55 @@ const Reception = () => {
                 <table className="reception-table">
 
                     <thead>
+
                         <tr>
                             <th>اسم مراجعه‌کننده</th>
                             <th>وضعیت ورود</th>
                             <th>هدایت به اتاق مشاوره</th>
                         </tr>
+
                     </thead>
 
-                        <tbody>
-                            {name?.map((person, index) => (
-                                <tr key={index}>
+                    <tbody>
 
-                                    <td className="person-name">
-                                        {person.name}
-                                    </td>
+                        {name.map((person) => (
 
-                                    <td>
-                                        <div className="status-buttons">
+                            <tr key={person.id}>
 
-                                            <button className="arrived">
-                                                امروز اومده
-                                            </button>
+                                <td className="person-name">
+                                    {person.name}
+                                </td>
 
-                                            <button className="not-arrived">
-                                                امروز نیومده
-                                            </button>
+                                <td>
 
-                                        </div>
-                                    </td>
+                                    <div className="status-buttons">
 
-                                    <td>
-                                        <button className="consultation-btn">
-                                            هدایت به اتاق مشاوره
-                                            <span>←</span>
+                                        <button className="arrived">
+                                            امروز اومده
                                         </button>
-                                    </td>
 
-                                </tr>
-                            ))}
-                        </tbody>
+                                        <button className="not-arrived">
+                                            امروز نیومده
+                                        </button>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <button className="consultation-btn">
+                                        هدایت به اتاق مشاوره
+                                        <span>←</span>
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        ))}
+
+                    </tbody>
 
                 </table>
 
@@ -104,6 +117,7 @@ const Reception = () => {
         </div>
 
     );
+
 }
 
 export default Reception;

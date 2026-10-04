@@ -451,6 +451,22 @@ def Logout(request):
 
     return response
 
+@api_view(["GET"])
+def getNames(request):
+
+    model = Personal.objects.all()
+
+    data = [
+        {
+            "name": person.name,
+            "id": person.id,
+        }
+        for person in model
+    ]
+
+    return Response(data)
+
+
 class CreateTokenCookie(TokenObtainPairView):
 
     def post(self, request, *args, **kwargs):
