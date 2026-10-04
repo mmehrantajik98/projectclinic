@@ -464,6 +464,7 @@ def getNames(request):
         for person in model
     ]
 
+    print(f"names:{data}")
     return Response(data)
 
 
