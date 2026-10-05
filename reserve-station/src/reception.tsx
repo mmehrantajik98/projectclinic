@@ -1,15 +1,15 @@
-import {useEffect, useState } from "react"
-import axios from "axios";
+import { useEffect, useState } from "react"
+import axios from "axios"
 import './Reception.css'
 
-interface names {
-    name: string,
-    id: number,
+interface Names {
+    name: string
+    id: number
 }
 
 const Reception = () => {
 
-    const [name, setName] = useState<names[]>([])
+    const [name, setName] = useState<Names[]>([])
 
     useEffect(() => {
 
@@ -19,22 +19,23 @@ const Reception = () => {
 
                 const res = await axios.get(
                     "https://hedro.ir/api/get_name/"
-                );
+                )
 
-                setName(res.data);
+                console.log("API:", res.data)
+
+                setName(res.data)
 
             } catch (error) {
 
-                console.log(error);
+                console.log("ERROR:", error)
 
             }
 
-        };
+        }
 
-        getPeople();
+        getPeople()
 
-    }, []);
-
+    }, [])
 
     return (
 
@@ -54,19 +55,16 @@ const Reception = () => {
 
             </div>
 
-
             <div className="table-container">
 
                 <table className="reception-table">
 
                     <thead>
-
                         <tr>
                             <th>اسم مراجعه‌کننده</th>
                             <th>وضعیت ورود</th>
                             <th>هدایت به اتاق مشاوره</th>
                         </tr>
-
                     </thead>
 
                     <tbody>
@@ -116,8 +114,8 @@ const Reception = () => {
 
         </div>
 
-    );
+    )
 
 }
 
-export default Reception;
+export default Reception

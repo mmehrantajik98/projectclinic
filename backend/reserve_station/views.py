@@ -465,6 +465,7 @@ def getNames(request):
     ]
 
     print(f"names:{data}")
+    print("NAMES:", data)
     return Response(data)
 
 
