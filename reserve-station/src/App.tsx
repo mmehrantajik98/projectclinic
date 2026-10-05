@@ -16,7 +16,6 @@ import Dashboard from "./dashboard";
 import ProtectedRoute, { UserProvider } from "./protectedRoute";
 import AuthUser from "./authUser";
 import ProtectedLogin from "./protectedLogin";
-import Receptions from "./Receptions";
 
 
 
@@ -71,14 +70,6 @@ const App = () => {
                                             }
                                         />
 
-                                        <Route
-                                            path="/Receptions"
-                                            element={
-                                                <ProtectedRoute allowedroles={["reception"]}>
-                                                    <Receptions />
-                                                </ProtectedRoute>
-                                            }
-                                        />
 
                                         <Route
                                             path="/Assistant"
