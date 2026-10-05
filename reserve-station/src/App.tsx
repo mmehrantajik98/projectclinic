@@ -16,7 +16,8 @@ import Dashboard from "./dashboard";
 import ProtectedRoute, { UserProvider } from "./protectedRoute";
 import AuthUser from "./authUser";
 import ProtectedLogin from "./protectedLogin";
-import Reception from "./reception";
+import Receptions from "./Receptions";
+
 
 
 const App = () => {
@@ -60,16 +61,21 @@ const App = () => {
                                             element={<Peoples />}
                                         />
                                         
-                                        <Route
-                                            path="/reception"
-                                            element={<Reception />}
-                                        />
 
                                         <Route
                                             path="/consent"
                                             element={
                                                 <ProtectedRoute allowedroles={["Consent"]}>
                                                     <Consent />
+                                                </ProtectedRoute>
+                                            }
+                                        />
+
+                                        <Route
+                                            path="/Receptions"
+                                            element={
+                                                <ProtectedRoute allowedroles={["reception"]}>
+                                                    <Receptions />
                                                 </ProtectedRoute>
                                             }
                                         />
