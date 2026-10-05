@@ -2,7 +2,6 @@ import axios from "axios";
 import type React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { authContext } from "./protectedLogin";
-import { Navigate } from "react-router-dom";
 
 interface children {
     children: React.ReactNode;
