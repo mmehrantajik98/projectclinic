@@ -57,10 +57,11 @@ const Receptions = () => {
             ))
 
             if(!person){return}
+            setIsConsent(true)
 
             try {
 
-                const res = await axios.post(
+                await axios.post(
                     "https://hedro.ir/api/Post_to_Consent/",
                         {
                         name : person.name,
