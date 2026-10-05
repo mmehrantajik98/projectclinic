@@ -120,4 +120,4 @@ const Receptions = () => {
 
 }
 
-export default Receptions
+export default Receptions;

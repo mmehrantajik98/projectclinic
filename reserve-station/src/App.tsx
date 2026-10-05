@@ -125,15 +125,6 @@ const App = () => {
                                             }
                                         />
 
-                                         <Route
-                                            path="/callcentertable"
-                                            element={
-                                                <ProtectedRoute allowedroles={["reception", "CEO", "marketing"]}>
-                                                    <CallCenterTable />
-                                                </ProtectedRoute>
-                                            }
-                                        />
-
                                         <Route
                                             path="/peoples/:id"
                                             element={<PersonInfo />}
