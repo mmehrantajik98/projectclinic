@@ -49,3 +49,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "price": event["price"],
             })
         )
+
+    async def postConsent(self, event):
+
+        print("EVENT RECEIVED:", event)
+
+        await self.send(
+            text_data=json.dumps({
+                "type": "get_Data_Consent",
+                "name": event["name"],
+                "age": event["age"],
+                "phone": event["phone"],
+                "file": event["file"],
+                "address": event["address"],
+                "date": event["date"],
+                "services": event["services"],
+                "price": event["price"],
+                "explain": event["explain"],
+                "id": event["id"],
+            })
+        )

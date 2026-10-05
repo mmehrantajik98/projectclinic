@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Personal, SubmitPersonal, PersonalPicture, Users
-from .serializer import PersonalSerializer, PersonalSubmit_Serializer, PersonalPictureSerializer, UserSerializer
+from .models import Personal, SubmitPersonal, PersonalPicture, Users, SubmitConsent
+from .serializer import PersonalSerializer, PersonalSubmit_Serializer, PersonalPictureSerializer, UserSerializer, SubmitConsentSerializer
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.db.models import Q
@@ -459,6 +459,14 @@ def getNames(request):
     data = [
         {
             "name": person.name,
+            "age": person.age,
+            "phone": person.phone,
+            "file": person.file,
+            "address": person.address,
+            "date": person.date,
+            "services": person.services,
+            "price": person.price,
+            "explain": person.explain,
             "id": person.id,
         }
         for person in model
@@ -466,8 +474,37 @@ def getNames(request):
 
     print(f"names:{data}")
     print("NAMES:", data)
+
     return Response(data)
 
+
+@api_view(["GET"])
+def Post_to_Consent(request):
+
+    serial = SubmitConsentSerializer(data=request.data)
+    if serial.is_valid(raise_exception=True):
+        serial.save()
+
+    channel_Layer = get_channel_layer()
+    async_to_sync(channel_Layer.group_send)(
+        "services_getdata",
+        {
+            "type": "postConsent",
+            "name": serial.name,
+            "age": serial.age,
+            "phone": serial.phone,
+            "file": serial.file,
+            "address": serial.address,
+            "date": serial.date,
+            "services": serial.services,
+            "price": serial.price,
+            "explain": serial.explain,
+            "id": serial.id,
+        }
+    )
+
+    return Response({"successfully": "successfully!"})
+    
 
 class CreateTokenCookie(TokenObtainPairView):
 

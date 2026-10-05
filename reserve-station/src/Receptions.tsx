@@ -3,13 +3,24 @@ import axios from "axios"
 import "./Receptions.css"
 
 interface Names {
-    name: string
-    id: number
+    id: number;
+    name: string;
+    age: number;
+    phone: string;
+    file: number | null;
+    address: string | null;
+    reserve_date: string;
+    date: string | null;
+    services: string | null;
+    price: number | null;
+    explain: string;
 }
 
 const Receptions = () => {
 
     const [name, setName] = useState<Names[]>([])
+
+    const [isConsent, setIsConsent] = useState<boolean | null>(false)
 
     useEffect(() => {
 
@@ -38,6 +49,40 @@ const Receptions = () => {
         getPeople()
 
     }, [])
+
+        const PostConsent = async (personID: number) => {
+
+            const person = name.find((found)=>(
+                found.id === personID
+            ))
+
+            if(!person){return}
+
+            try {
+
+                const res = await axios.post(
+                    "https://hedro.ir/api/Post_to_Consent/",
+                        {
+                        name : person.name,
+                        age : person.age,
+                        phone : person.phone,
+                        file : person.file,
+                        address : person.address,
+                        reserve_date : person.reserve_date,
+                        date : person.date,
+                        services : person.services,
+                        price : person.price,
+                        explain : person.explain,
+                        }
+                )
+
+            } catch (error) {
+
+                console.log("ERROR:", error)
+
+            }
+
+        }
 
     return (
 
@@ -97,9 +142,10 @@ const Receptions = () => {
 
                                 <td>
 
-                                    <button className="consultation-btn">
-                                        هدایت به اتاق مشاوره
-                                        <span>←</span>
+                                    <button disabled={isConsent === true} className="consultation-btn" onClick={()=>PostConsent(person.id)}>
+                                       {
+                                            isConsent ? "!هدایت شد" : " هدایت به اتاق مشاوره"
+                                       }
                                     </button>
 
                                 </td>

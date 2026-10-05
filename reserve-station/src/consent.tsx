@@ -14,6 +14,7 @@ interface afrad {
     id: number;
     services: string;
     price: number;
+    explain: string;
 }
 
 const Consent: React.FC = () => {
@@ -163,7 +164,9 @@ const Consent: React.FC = () => {
             web.current.onmessage = (event) => {
                 const data = JSON.parse(event.data);
 
-                setAfrad(prev => [...prev, data]);
+                if (data.type === "get_Data_Consent"){
+                    setAfrad((prev)=>[...prev, data])
+                }
             };
 
             web.current.onerror = (error) => {

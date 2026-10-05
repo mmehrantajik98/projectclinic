@@ -111,6 +111,20 @@ class SubmitPersonal(models.Model):
     explain = models.TextField()
 
 
+class SubmitConsent(models.Model):
+
+    name = models.CharField(max_length=122)
+    age = models.IntegerField()
+    phone = models.CharField(max_length=15)
+    file = models.IntegerField(blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    reserve_date = models.DateField()
+    date = models.DateField(auto_now_add=True, null=True)
+    services = models.TextField(blank=True, null=True)
+    price = models.IntegerField(blank=True, null=True)
+    explain = models.TextField()
+
+
 class PersonalPicture(models.Model):
 
     person = models.ForeignKey(
