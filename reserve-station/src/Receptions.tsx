@@ -1,9 +1,6 @@
 import "./Receptions.css"
 
-
 const Receptions = () => {
-
-
 
     return (
 
