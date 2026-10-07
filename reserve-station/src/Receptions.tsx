@@ -122,10 +122,6 @@ const Receptions = () => {
         }
     };
 
-    const handleConsultation = (id: number) => {
-        console.log("CONSULTATION ROOM:", id);
-    };
-
     if (loading) {
         return (
             <div className="receptions-loading">
