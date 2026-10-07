@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import "./Receptions.css";
 
 interface Person {
@@ -27,21 +28,14 @@ const Receptions = () => {
 
     const getPeople = async () => {
         try {
-            const response = await fetch(
+            const response = await axios.get(
                 "https://hedro.ir/api/get_name/",
                 {
-                    method: "GET",
-                    credentials: "include",
+                    withCredentials: true,
                 }
             );
 
-            if (!response.ok) {
-                throw new Error("خطا در دریافت اطلاعات");
-            }
-
-            const data = await response.json();
-
-            setPeople(data);
+            setPeople(response.data);
 
         } catch (error) {
             console.error("GET PEOPLE ERROR:", error);
@@ -55,7 +49,6 @@ const Receptions = () => {
         const person = people.find((item) => item.id === id);
 
         if (!person) {
-            console.error("Person not found");
             return;
         }
 
@@ -63,34 +56,24 @@ const Receptions = () => {
 
         try {
 
-            const response = await fetch(
+            await axios.post(
                 "https://hedro.ir/api/Post_to_Consent/",
                 {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({
-                        name: person.name,
-                        age: person.age,
-                        phone: person.phone,
-                        file: person.file,
-                        address: person.address,
-                        date: person.date,
-                        services: person.services,
-                        price: person.price,
-                        explain: person.explain,
-                        id: person.id,
-                    }),
+                    name: person.name,
+                    age: person.age,
+                    phone: person.phone,
+                    file: person.file,
+                    address: person.address,
+                    date: person.date,
+                    services: person.services,
+                    price: person.price,
+                    explain: person.explain,
+                    id: person.id,
+                },
+                {
+                    withCredentials: true,
                 }
             );
-
-            if (!response.ok) {
-                const errorData = await response.text();
-                console.error("POST ERROR:", errorData);
-                throw new Error("ارسال اطلاعات انجام نشد");
-            }
 
             console.log("PERSON SENT TO CONSENT:", person);
 
