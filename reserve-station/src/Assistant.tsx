@@ -1,279 +1,292 @@
-import type React from "react";
-import { useEffect, useRef, useState } from "react";
-import "./consent.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import "./Asistant.css";
 
-interface afrad {
+interface Patient {
+    id: number;
     name: string;
     age: number;
-    phone: number;
-    file: string;
-    address: string;
+    phone: string;
+    file: number | null;
+    address: string | null;
     reserve_date: string;
     date: string;
-    id: number;
-    services: string;
-    price: number;
+    services: string | null;
+    price: number | null;
+    explain: string | null;
 }
 
-const Assistant: React.FC = () => {
+interface Assistant {
+    id: number;
+    username: string;
+    role: string;
+}
 
-    const [afrad, setAfrad] = useState<afrad[]>([]);
-    const [selectedId, setSelectedId] =
-        useState<number | null>(null);
+const Asistant = () => {
+    const [patients, setPatients] = useState<Patient[]>([]);
+    const [assistants, setAssistants] = useState<Assistant[]>([]);
+    const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+    const [selectedAssistant, setSelectedAssistant] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
 
-    const web = useRef<WebSocket | null>(null);
+    const getPatients = async () => {
+        try {
+            const response = await axios.get(
+                "https://hedro.ir/api/get_Asistants_personal/",
+                {
+                    withCredentials: true,
+                }
+            );
 
-    const selectedPerson = afrad.find(
-        (person) => person.id === selectedId
-    );
+            setPatients(response.data);
+        } catch (error) {
+            console.error("Error getting patients:", error);
+        }
+    };
+
+    const getAssistants = async () => {
+        try {
+            const response = await axios.get(
+                "https://hedro.ir/api/get_Asistant/",
+                {
+                    withCredentials: true,
+                }
+            );
+
+            setAssistants(response.data);
+        } catch (error) {
+            console.error("Error getting assistants:", error);
+        }
+    };
 
     useEffect(() => {
+        const getData = async () => {
+            setLoading(true);
 
-        const wkurl =
-            "wss://hedro.ir/ws/services/getdata/";
+            await Promise.all([
+                getPatients(),
+                getAssistants(),
+            ]);
 
-        web.current = new WebSocket(wkurl);
-
-        web.current.onopen = () => {
-
-            console.log("connected websocket");
-
-            web.current?.send(
-                JSON.stringify({
-                    type: "send_data"
-                })
-            );
-
+            setLoading(false);
         };
 
-        web.current.onmessage = (event) => {
-
-            const data = JSON.parse(event.data);
-
-            if (
-                data.type ===
-                "get_Data_for_Assistant"
-            ) {
-
-                const person: afrad = {
-                    name: data.name,
-                    age: data.age,
-                    phone: data.phone,
-                    file: data.file,
-                    address: data.address,
-                    reserve_date: data.reserve_date,
-                    date: data.date,
-                    id: data.id,
-                    services: data.services,
-                    price: data.price,
-                };
-
-                setAfrad((prev) => {
-
-                    const exists = prev.some(
-                        (item) =>
-                            item.id === person.id
-                    );
-
-                    if (exists) {
-                        return prev;
-                    }
-
-                    return [
-                        ...prev,
-                        person
-                    ];
-
-                });
-
-            }
-
-        };
-
-        web.current.onerror = (error) => {
-
-            console.log(
-                "WebSocket error:",
-                error
-            );
-
-        };
-
-        web.current.onclose = () => {
-
-            console.log(
-                "WebSocket closed"
-            );
-
-        };
-
-        return () => {
-
-            web.current?.close();
-            web.current = null;
-
-        };
-
+        getData();
     }, []);
 
+    const handleAssistantChange = async (
+        event: React.ChangeEvent<HTMLSelectElement>
+    ) => {
+        const username = event.target.value;
+
+        setSelectedAssistant(username);
+
+        if (!username || !selectedPatient) {
+            return;
+        }
+
+        try {
+            setSaving(true);
+
+            await axios.post(
+                "https://hedro.ir/api/post_asistant_with_Personal/",
+                {
+                    assistant: Number(username),
+                    patient: selectedPatient.id,
+                },
+                {
+                    withCredentials: true,
+                }
+            );
+
+            alert(
+                `دستیار ${username} برای ${selectedPatient.name} ثبت شد`
+            );
+        } catch (error) {
+            console.error("Error saving assistant:", error);
+            alert("ثبت دستیار انجام نشد");
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const closePatientBox = () => {
+        setSelectedPatient(null);
+        setSelectedAssistant("");
+    };
+
+    if (loading) {
+        return (
+            <div className="assistant-loading">
+                در حال دریافت اطلاعات...
+            </div>
+        );
+    }
+
     return (
+        <div className="assistant-page">
 
-        <div className="consent-container">
+            <div className="assistant-header">
+                <h1>مراجعه‌کنندگان</h1>
+                <span>{patients.length} مراجعه‌کننده</span>
+            </div>
 
-            <h1>
-                بخش دستیار
-            </h1>
+            <div className="assistant-patients">
 
-            <div className="consent-list">
-
-                {afrad.map((person) => (
-
-                    <div
-                        key={person.id}
-                        className={`person-box ${
-                            selectedId === person.id
-                                ? "active"
-                                : ""
-                        }`}
-                        onClick={() =>
-                            setSelectedId(
-                                person.id
-                            )
-                        }
-                    >
-
-                        <span>
-                            {person.name}
-                        </span>
-
+                {patients.length === 0 ? (
+                    <div className="assistant-empty">
+                        مراجعه‌کننده‌ای ثبت نشده است.
                     </div>
-
-                ))}
+                ) : (
+                    patients.map((patient) => (
+                        <div
+                            key={patient.id}
+                            className="patient-box"
+                            onClick={() => {
+                                setSelectedPatient(patient);
+                                setSelectedAssistant("");
+                            }}
+                        >
+                            <span>{patient.name}</span>
+                        </div>
+                    ))
+                )}
 
             </div>
 
-            {selectedPerson && (
-
-                <div className="person-details">
-
-                    <div className="details-header">
-
-                        <h2>
-                            {selectedPerson.name}
-                        </h2>
+            {selectedPatient && (
+                <div className="patient-modal-overlay">
+                    <div className="patient-modal">
 
                         <button
-                            onClick={() =>
-                                setSelectedId(null)
-                            }
+                            className="patient-modal-close"
+                            onClick={closePatientBox}
                         >
-                            بستن
+                            ×
                         </button>
 
+                        <div className="patient-modal-header">
+                            <h2>{selectedPatient.name}</h2>
+                            <p>اطلاعات مراجعه‌کننده</p>
+                        </div>
+
+                        <div className="patient-info">
+
+                            <div className="info-item">
+                                <span>نام</span>
+                                <strong>
+                                    {selectedPatient.name}
+                                </strong>
+                            </div>
+
+                            <div className="info-item">
+                                <span>سن</span>
+                                <strong>
+                                    {selectedPatient.age}
+                                </strong>
+                            </div>
+
+                            <div className="info-item">
+                                <span>شماره تماس</span>
+                                <strong>
+                                    {selectedPatient.phone}
+                                </strong>
+                            </div>
+
+                            <div className="info-item">
+                                <span>شماره پرونده</span>
+                                <strong>
+                                    {selectedPatient.file ?? "-"}
+                                </strong>
+                            </div>
+
+                            <div className="info-item">
+                                <span>تاریخ رزرو</span>
+                                <strong>
+                                    {selectedPatient.reserve_date}
+                                </strong>
+                            </div>
+
+                            <div className="info-item">
+                                <span>تاریخ ثبت</span>
+                                <strong>
+                                    {selectedPatient.date}
+                                </strong>
+                            </div>
+
+                            <div className="info-item">
+                                <span>خدمات</span>
+                                <strong>
+                                    {selectedPatient.services ?? "-"}
+                                </strong>
+                            </div>
+
+                            <div className="info-item">
+                                <span>قیمت</span>
+                                <strong>
+                                    {selectedPatient.price
+                                        ? `${selectedPatient.price.toLocaleString()} تومان`
+                                        : "-"}
+                                </strong>
+                            </div>
+
+                            <div className="info-item info-full">
+                                <span>آدرس</span>
+                                <strong>
+                                    {selectedPatient.address ?? "-"}
+                                </strong>
+                            </div>
+
+                            <div className="info-item info-full">
+                                <span>توضیحات</span>
+                                <strong>
+                                    {selectedPatient.explain ?? "-"}
+                                </strong>
+                            </div>
+
+                        </div>
+
+                        <div className="assistant-select-section">
+
+                            <label htmlFor="assistant">
+                                انتخاب دستیار
+                            </label>
+
+                            <select
+                                id="assistant"
+                                value={selectedAssistant}
+                                onChange={handleAssistantChange}
+                                disabled={saving}
+                            >
+                                <option value="">
+                                    انتخاب دستیار
+                                </option>
+
+                                {assistants.map((assistant) => (
+                                    <option
+                                        key={assistant.id}
+                                        value={assistant.id}
+                                    >
+                                        {assistant.username}
+                                    </option>
+                                ))}
+                            </select>
+
+                            {saving && (
+                                <p className="saving-text">
+                                    در حال ثبت دستیار...
+                                </p>
+                            )}
+
+                        </div>
+
                     </div>
-
-                    <div className="details-grid">
-
-                        <div>
-                            <span>
-                                آیدی
-                            </span>
-
-                            <p>
-                                {selectedPerson.id}
-                            </p>
-                        </div>
-
-                        <div>
-                            <span>
-                                نام
-                            </span>
-
-                            <p>
-                                {selectedPerson.name}
-                            </p>
-                        </div>
-
-                        <div>
-                            <span>
-                                سن
-                            </span>
-
-                            <p>
-                                {selectedPerson.age}
-                            </p>
-                        </div>
-
-                        <div>
-                            <span>
-                                تلفن
-                            </span>
-
-                            <p>
-                                {selectedPerson.phone}
-                            </p>
-                        </div>
-
-                        <div>
-                            <span>
-                                کد پذیرش
-                            </span>
-
-                            <p>
-                                {selectedPerson.file}
-                            </p>
-                        </div>
-
-                        <div>
-                            <span>
-                                تاریخ رزرو
-                            </span>
-
-                            <p>
-                                {selectedPerson.reserve_date}
-                            </p>
-                        </div>
-
-                        <div>
-                            <span>
-                                خدمات برای مراجعه کننده
-                            </span>
-
-                            <p>
-                                {selectedPerson.services}
-                            </p>
-                        </div>
-
-                        <div>
-                            <span>
-                                قیمت
-                            </span>
-
-                            <p>
-                                {selectedPerson.price}
-                            </p>
-                        </div>
-
-                        <div className="address">
-
-                            <span>
-                                آدرس
-                            </span>
-
-                            <p>
-                                {selectedPerson.address}
-                            </p>
-
-                        </div>
-
-                    </div>
-
                 </div>
-
             )}
 
         </div>
     );
 };
 
-export default Assistant;
+export default Asistant;

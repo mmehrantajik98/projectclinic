@@ -203,6 +203,38 @@ const Consent: React.FC = () => {
     }, []);
 
 
+    const sendToAssistant = async () => {
+    if (!selectedPerson) return;
+
+    try {
+        const req = await axios.post(
+            "https://hedro.ir/api/post_Asistant/",
+            {
+                name: selectedPerson.name,
+                age: selectedPerson.age,
+                phone: selectedPerson.phone,
+                file: selectedPerson.file,
+                address: selectedPerson.address,
+                reserve_date: selectedPerson.reserve_date,
+                services: selectedPerson.services,
+                price: selectedPerson.price,
+                explain: selectedPerson.explain,
+            },
+            {
+                withCredentials: true
+            }
+        );
+
+        console.log("ASSISTANT RESPONSE:", req.data);
+
+        alert("مراجع با موفقیت برای دستیار ثبت شد");
+
+    } catch (error) {
+        console.log("SEND TO ASSISTANT ERROR:", error);
+    }
+};
+
+
     return (
 
         <div className="consent-container">
@@ -255,6 +287,10 @@ const Consent: React.FC = () => {
                             }
                         >
                             بستن
+                        </button>
+
+                        <button onClick={sendToAssistant}>
+                            ارسال برای دستیار
                         </button>
 
                     </div>

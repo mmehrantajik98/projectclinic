@@ -139,6 +139,38 @@ class AbcentPatient(models.Model):
     explain = models.TextField(blank=True, null=True)
 
 
+class Asistant(models.Model):
+
+    name = models.CharField(max_length=122)
+    age = models.IntegerField()
+    phone = models.CharField(max_length=15)
+    file = models.IntegerField(blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    reserve_date = models.DateField()
+    date = models.DateField(auto_now_add=True, null=True)
+    services = models.TextField(blank=True, null=True)
+    price = models.IntegerField(blank=True, null=True)
+    explain = models.TextField(blank=True, null=True)
+
+
+class whoisAsistant(models.Model):
+
+    assistant = models.ForeignKey(
+        Users,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="assistant"
+    )
+
+    patient = models.ForeignKey(
+        Asistant,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="patients"
+    )
+
 class PersonalPicture(models.Model):
 
     person = models.ForeignKey(

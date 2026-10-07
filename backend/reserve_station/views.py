@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Personal, SubmitPersonal, PersonalPicture, Users, SubmitConsent, AbcentPatient
-from .serializer import PersonalSerializer, PersonalSubmit_Serializer, PersonalPictureSerializer, UserSerializer, SubmitConsentSerializer, AbcentPatientSerializer
+from .models import Personal, SubmitPersonal, PersonalPicture, Users, SubmitConsent, AbcentPatient, Asistant
+from .serializer import PersonalSerializer, PersonalSubmit_Serializer, PersonalPictureSerializer, UserSerializer, SubmitConsentSerializer, AbcentPatientSerializer, AsistantSerializer, whoisAsistantSerializer
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.db.models import Q
@@ -554,6 +554,78 @@ def getAbcent(request):
     ]
 
     return Response(data)
+
+
+@api_view(["POST"])
+def Post_to_Asistant(request):
+
+    serial = AsistantSerializer(data=request.data)
+
+    if not serial.is_valid():
+        print("SERIALIZER ERRORS:", serial.errors)
+        return Response(serial.errors, status=400)
+
+    person = serial.save()
+
+    return Response({
+        "successfully": "successfully!",
+        "id": person.id
+    })
+
+
+@api_view(["GET"])
+def getAsistants(request):
+
+    asistants = Users.objects.filter(
+        role="Assistant"
+    ).values(
+        "id",
+        "username",
+        "role"
+    )
+
+    return Response(list(asistants))
+
+
+@api_view(["GET"])
+def get_Asistants_personal(request):
+
+    peronal_for_assistant = Asistant.objects.all()
+
+    data = [
+        {
+            "id": person.id,
+            "name": person.name,
+            "age": person.age,
+            "phone": person.phone,
+            "file": person.file,
+            "address": person.address,
+            "reserve_date": person.reserve_date,
+            "date": person.date,
+            "services": person.services,
+            "price": person.price,
+            "explain": person.explain,
+        }
+        for person in peronal_for_assistant
+    ]
+
+    return Response(data)
+
+
+@api_view(["POST"])
+def post_asistant_with_Personal(request):
+
+    whois = whoisAsistantSerializer(data=request.data)
+
+    if not whois.is_valid():
+        print("SERIALIZER ERRORS:", whois.errors)
+        return Response(whois.errors, status=400)
+    
+    person = whois.save()
+    
+    return Response({
+            "successfully": "successfully!",
+        })
     
 
 class CreateTokenCookie(TokenObtainPairView):

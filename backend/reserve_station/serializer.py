@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Personal, PersonalPicture, Users, SubmitConsent, AbcentPatient
+from .models import Personal, PersonalPicture, Users, SubmitConsent, AbcentPatient, Asistant
 
 class PersonalSerializer (serializers.ModelSerializer):
 
@@ -29,6 +29,18 @@ class AbcentPatientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AbcentPatient
+        fields = "__all__"
+
+class AsistantSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Asistant
+        fields = "__all__"
+
+class whoisAsistantSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Asistant
         fields = "__all__"
 
 class UserSerializer(serializers.ModelSerializer):
