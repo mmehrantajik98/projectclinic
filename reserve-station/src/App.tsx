@@ -17,125 +17,117 @@ import ProtectedRoute, { UserProvider } from "./protectedRoute";
 import AuthUser from "./authUser";
 import ProtectedLogin from "./protectedLogin";
 
-
-
 const App = () => {
- return (
-       <ProtectedLogin>
+    return (
+        <Routes>
 
-    <Routes>
+            <Route
+                path="/login"
+                element={<Login />}
+            />
 
-        <Route
-            path="/login"
-            element={<Login />}
-        />
+            <Route
+                path="/sign"
+                element={<Sign />}
+            />
 
-        <Route
-            path="/sign"
-            element={
-                <Sign />
-                }   
-        />
+            <Route
+                path="*"
+                element={
+                    <ProtectedLogin>
+                        <AuthUser>
 
-        <Route
-            path="*"
-            element={
-                <AuthUser>
+                            <UserProvider>
 
-                    <UserProvider>
+                                <PeopleProvider>
 
-                        <PeopleProvider>
+                                    <CallCenterContext>
 
-                            <CallCenterContext>
+                                        <Layout>
 
-                                <Layout>
+                                            <Routes>
 
-                                    <Routes>
+                                                <Route
+                                                    path="/"
+                                                    element={<Dashboard />}
+                                                />
 
-                                        <Route
-                                            path="/"
-                                            element={<Dashboard />}
-                                        />
+                                                <Route
+                                                    path="/Client"
+                                                    element={<Client />}
+                                                />
 
-                                        <Route
-                                            path="/Client"
-                                            element={<Client />}
-                                        />
+                                                <Route
+                                                    path="/peoples"
+                                                    element={<Peoples />}
+                                                />
 
-                                        <Route
-                                            path="/peoples"
-                                            element={<Peoples />}
-                                        />
-                                        
+                                                <Route
+                                                    path="/consent"
+                                                    element={
+                                                        <ProtectedRoute allowedroles={["Consent"]}>
+                                                            <Consent />
+                                                        </ProtectedRoute>
+                                                    }
+                                                />
 
-                                        <Route
-                                            path="/consent"
-                                            element={
-                                                <ProtectedRoute allowedroles={["Consent"]}>
-                                                    <Consent />
-                                                </ProtectedRoute>
-                                            }
-                                        />
+                                                <Route
+                                                    path="/Assistant"
+                                                    element={
+                                                        <ProtectedRoute allowedroles={["Assistant"]}>
+                                                            <Assistant />
+                                                        </ProtectedRoute>
+                                                    }
+                                                />
 
+                                                <Route
+                                                    path="/photographer"
+                                                    element={
+                                                        <ProtectedRoute allowedroles={["photographer"]}>
+                                                            <PhotoGraph />
+                                                        </ProtectedRoute>
+                                                    }
+                                                />
 
-                                        <Route
-                                            path="/Assistant"
-                                            element={
-                                                <ProtectedRoute allowedroles={["Assistant"]}>
-                                                    <Assistant />
-                                                </ProtectedRoute>
-                                            }
-                                        />
+                                                <Route
+                                                    path="/callcenter"
+                                                    element={
+                                                        <ProtectedRoute allowedroles={["callcenter"]}>
+                                                            <CallCenter />
+                                                        </ProtectedRoute>
+                                                    }
+                                                />
 
-                                        <Route
-                                            path="/photographer"
-                                            element={
-                                                <ProtectedRoute allowedroles={["photographer"]}>
-                                                    <PhotoGraph />
-                                                </ProtectedRoute>
-                                            }
-                                        />
+                                                <Route
+                                                    path="/callcentertable"
+                                                    element={
+                                                        <ProtectedRoute allowedroles={["callcenter"]}>
+                                                            <CallCenterTable />
+                                                        </ProtectedRoute>
+                                                    }
+                                                />
 
-                                        <Route
-                                            path="/callcenter"
-                                            element={
-                                                <ProtectedRoute allowedroles={["callcenter"]}>
-                                                    <CallCenter />
-                                                </ProtectedRoute>
-                                            }
-                                        />
+                                                <Route
+                                                    path="/peoples/:id"
+                                                    element={<PersonInfo />}
+                                                />
 
-                                        <Route
-                                            path="/callcentertable"
-                                            element={
-                                                <ProtectedRoute allowedroles={["callcenter"]}>
-                                                    <CallCenterTable />
-                                                </ProtectedRoute>
-                                            }
-                                        />
+                                            </Routes>
 
-                                        <Route
-                                            path="/peoples/:id"
-                                            element={<PersonInfo />}
-                                        />
+                                        </Layout>
 
-                                    </Routes>
+                                    </CallCenterContext>
 
-                                </Layout>
+                                </PeopleProvider>
 
-                            </CallCenterContext>
+                            </UserProvider>
 
-                        </PeopleProvider>
+                        </AuthUser>
+                    </ProtectedLogin>
+                }
+            />
 
-                    </UserProvider>
-
-                </AuthUser>
-            }
-        />
-
-    </Routes>
-
-</ProtectedLogin>
+        </Routes>
     );
 };
 
