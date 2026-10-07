@@ -15,6 +15,20 @@ interface Update {
     price: number;
 }
 
+interface AbsentPerson {
+    id: number;
+    name: string;
+    age: number;
+    phone: string;
+    file: number | null;
+    address: string | null;
+    reserve_date: string;
+    date: string;
+    services: string | null;
+    price: number | null;
+    explain: string | null;
+}
+
 const CallCenterTable: React.FC = () => {
     const context = useContext(PeoplesContext);
 
@@ -29,6 +43,7 @@ const CallCenterTable: React.FC = () => {
     const [search, setSearch] = useState("");
     const [isSearching, setIsSearching] = useState(false);
     const [submittedIds, setSubmittedIds] = useState<number[]>([]);
+    const [absentPeople, setAbsentPeople] = useState<AbsentPerson[]>([]);
 
     const navigate = useNavigate();
 
@@ -45,7 +60,20 @@ const CallCenterTable: React.FC = () => {
             }
         };
 
+        const getAbsentPeople = async () => {
+            try {
+                const res = await axios.get(
+                    "https://hedro.ir/api/getAbcent/"
+                );
+
+                setAbsentPeople(res.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
         getPeople();
+        getAbsentPeople();
     }, []);
 
     if (!context) {
@@ -487,6 +515,82 @@ const CallCenterTable: React.FC = () => {
 
                 </table>
             )}
+
+    <div className="absent-section">
+
+        <h2 className="absent-title">
+            مراجعه‌کنندگانی که نیومدن
+        </h2>
+
+        <table className="callcenter-table absent-table">
+
+            <thead>
+                <tr>
+                    <th>آیدی</th>
+                    <th>نام</th>
+                    <th>سن</th>
+                    <th>تلفن</th>
+                    <th>تاریخ رزرو</th>
+                    <th>خدمات</th>
+                    <th>بیعانه</th>
+                    <th>توضیحات</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {absentPeople.map((person) => (
+
+                    <tr key={person.id}>
+
+                        <td>
+                            {person.id}
+                        </td>
+
+                        <td>
+                            {person.name}
+                        </td>
+
+                        <td>
+                            {person.age}
+                        </td>
+
+                        <td>
+                            {person.phone}
+                        </td>
+
+                        <td>
+                            {person.reserve_date}
+                        </td>
+
+                        <td>
+                            {person.services || "-"}
+                        </td>
+
+                        <td>
+                            {person.price
+                                ? person.price.toLocaleString("en-US")
+                                : "-"
+                            }
+                        </td>
+
+                        <td>
+                            {person.explain || "-"}
+                        </td>
+
+                    </tr>
+
+                ))}
+            </tbody>
+
+        </table>
+
+        {absentPeople.length === 0 && (
+            <div className="callcenter-search-status">
+                مراجعه‌کننده‌ای که نیومده وجود ندارد
+            </div>
+        )}
+
+    </div>
 
             {!isSearching &&
                 search.trim() &&
