@@ -31,6 +31,13 @@ const App = () => {
         />
 
         <Route
+            path="/sign"
+            element={
+                <Sign />
+                }   
+        />
+
+        <Route
             path="*"
             element={
                 <AuthUser>
@@ -77,15 +84,6 @@ const App = () => {
                                                 <ProtectedRoute allowedroles={["Assistant"]}>
                                                     <Assistant />
                                                 </ProtectedRoute>
-                                            }
-                                        />
-
-                                        <Route
-                                            path="/sign"
-                                            element={
-                                            <ProtectedRoute allowedroles={["CEO", "marketing"]}>
-                                                <Sign />
-                                            </ProtectedRoute>
                                             }
                                         />
 
