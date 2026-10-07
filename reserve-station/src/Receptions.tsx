@@ -1,13 +1,215 @@
-import "./Receptions.css"
+import { useEffect, useState } from "react";
+import "./Receptions.css";
+
+interface Person {
+    id: number;
+    name: string;
+    age: number;
+    phone: string;
+    file: string | null;
+    address: string;
+    date: string;
+    services: string | null;
+    price: number;
+    explain: string | null;
+}
 
 const Receptions = () => {
 
+    const [people, setPeople] = useState<Person[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [sendingId, setSendingId] = useState<number | null>(null);
+    const [presentIds, setPresentIds] = useState<number[]>([]);
+
+    useEffect(() => {
+        getPeople();
+    }, []);
+
+    const getPeople = async () => {
+        try {
+            const response = await fetch(
+                "https://hedro.ir/api/get_name/",
+                {
+                    method: "GET",
+                    credentials: "include",
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("خطا در دریافت اطلاعات");
+            }
+
+            const data = await response.json();
+
+            setPeople(data);
+
+        } catch (error) {
+            console.error("GET PEOPLE ERROR:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handlePresent = async (id: number) => {
+
+        const person = people.find((item) => item.id === id);
+
+        if (!person) {
+            console.error("Person not found");
+            return;
+        }
+
+        setSendingId(id);
+
+        try {
+
+            const response = await fetch(
+                "https://hedro.ir/api/Post_to_Consent/",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        name: person.name,
+                        age: person.age,
+                        phone: person.phone,
+                        file: person.file,
+                        address: person.address,
+                        date: person.date,
+                        services: person.services,
+                        price: person.price,
+                        explain: person.explain,
+                        id: person.id,
+                    }),
+                }
+            );
+
+            if (!response.ok) {
+                const errorData = await response.text();
+                console.error("POST ERROR:", errorData);
+                throw new Error("ارسال اطلاعات انجام نشد");
+            }
+
+            console.log("PERSON SENT TO CONSENT:", person);
+
+            setPresentIds((prev) => [...prev, id]);
+
+        } catch (error) {
+            console.error("POST TO CONSENT ERROR:", error);
+        } finally {
+            setSendingId(null);
+        }
+    };
+
+    const handleAbsent = (id: number) => {
+        console.log("ABSENT:", id);
+    };
+
+    const handleConsultation = (id: number) => {
+        console.log("CONSULTATION ROOM:", id);
+    };
+
+    if (loading) {
+        return (
+            <div className="receptions-loading">
+                در حال دریافت اطلاعات...
+            </div>
+        );
+    }
+
     return (
+        <div className="receptions">
 
-        <h1>hi</h1>
+            <div className="receptions-header">
+                <h1>مراجعه‌کنندگان</h1>
+            </div>
 
-    )
+            <div className="receptions-table-wrapper">
 
-}
+                <table className="receptions-table">
+
+                    <thead>
+                        <tr>
+                            <th>نام مراجعه‌کننده</th>
+                            <th>حضور</th>
+                            <th>عدم حضور</th>
+                            <th>اتاق مشاوره</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {people.length === 0 ? (
+
+                            <tr>
+                                <td colSpan={4} className="empty-row">
+                                    مراجعه‌کننده‌ای وجود ندارد
+                                </td>
+                            </tr>
+
+                        ) : (
+
+                            people.map((person) => (
+
+                                <tr key={person.id}>
+
+                                    <td className="person-name">
+                                        {person.name}
+                                    </td>
+
+                                    <td>
+                                        <button
+                                            className="present-btn"
+                                            onClick={() => handlePresent(person.id)}
+                                            disabled={
+                                                sendingId === person.id ||
+                                                presentIds.includes(person.id)
+                                            }
+                                        >
+                                            {sendingId === person.id
+                                                ? "در حال ارسال..."
+                                                : presentIds.includes(person.id)
+                                                    ? "ثبت شد"
+                                                    : "حضور دارد"}
+                                        </button>
+                                    </td>
+
+                                    <td>
+                                        <button
+                                            className="absent-btn"
+                                            onClick={() => handleAbsent(person.id)}
+                                        >
+                                            عدم حضور
+                                        </button>
+                                    </td>
+
+                                    <td>
+                                        <button
+                                            className="consultation-btn"
+                                            onClick={() =>
+                                                handleConsultation(person.id)
+                                            }
+                                        >
+                                            اتاق مشاوره
+                                        </button>
+                                    </td>
+
+                                </tr>
+
+                            ))
+
+                        )}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    );
+};
 
 export default Receptions;

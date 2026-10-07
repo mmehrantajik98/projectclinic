@@ -451,6 +451,7 @@ def Logout(request):
 
     return response
 
+
 @api_view(["GET"])
 def getNames(request):
 
@@ -478,7 +479,7 @@ def getNames(request):
     return Response(data)
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 def Post_to_Consent(request):
 
     serial = SubmitConsentSerializer(data=request.data)

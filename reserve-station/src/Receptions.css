@@ -1,507 +1,148 @@
-.reception {
+.receptions {
     direction: rtl;
     width: 100%;
     min-height: 100vh;
-    padding: 32px;
+    padding: 30px;
     box-sizing: border-box;
-
-    background: #0b0d11;
-    color: #f5f7fa;
-
-    font-family: "Vazirmatn", "IRANSans", sans-serif;
+    background: #f5f6f8;
 }
 
-
-/* =========================
-   Header
-========================= */
-
-.reception-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 25px;
-    margin-bottom: 28px;
+.receptions-header {
+    margin-bottom: 25px;
 }
 
-.reception-header h1 {
+.receptions-header h1 {
     margin: 0;
-
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
-    letter-spacing: -0.5px;
+    color: #1f2937;
 }
 
-.reception-header p {
-    margin: 8px 0 0;
-
-    color: #7f8796;
-    font-size: 13px;
-}
-
-
-/* =========================
-   Count Card
-========================= */
-
-.reception-count {
-    min-width: 155px;
-
-    padding: 15px 22px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    background: linear-gradient(
-        145deg,
-        #171b22,
-        #11141a
-    );
-
-    border: 1px solid #252a33;
-    border-radius: 15px;
-
-    box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.18);
-
-    transition: 0.25s;
-}
-
-.reception-count:hover {
-    border-color: #343b47;
-    transform: translateY(-2px);
-}
-
-.reception-count span {
-    color: #7f8796;
-    font-size: 11px;
-}
-
-.reception-count strong {
-    margin-top: 5px;
-
-    color: #ffffff;
-
-    font-size: 25px;
-    font-weight: 700;
-}
-
-
-/* =========================
-   Table Wrapper
-========================= */
-
-.table-container {
+.receptions-table-wrapper {
     width: 100%;
-
     overflow-x: auto;
-
-    background: #111419;
-
-    border: 1px solid #242932;
-    border-radius: 18px;
-
-    box-shadow:
-        0 15px 45px rgba(0, 0, 0, 0.2);
-
-    scrollbar-width: thin;
-    scrollbar-color: #353b46 transparent;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
-
-/* Scrollbar */
-
-.table-container::-webkit-scrollbar {
-    height: 7px;
-}
-
-.table-container::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.table-container::-webkit-scrollbar-thumb {
-    background: #353b46;
-    border-radius: 20px;
-}
-
-
-/* =========================
-   Table
-========================= */
-
-.reception-table {
+.receptions-table {
     width: 100%;
-    min-width: 780px;
-
-    border-collapse: separate;
-    border-spacing: 0;
-
-    table-layout: fixed;
+    border-collapse: collapse;
+    min-width: 700px;
 }
 
-
-/* =========================
-   Table Header
-========================= */
-
-.reception-table thead {
-    background: #171a20;
+.receptions-table th {
+    background: #f8f9fb;
+    color: #374151;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 18px 15px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-.reception-table th {
-    height: 55px;
-
-    padding: 0 22px;
-
-    text-align: right;
-
-    color: #8d95a3;
-
-    font-size: 12px;
-    font-weight: 500;
-
-    border-bottom: 1px solid #272c35;
+.receptions-table td {
+    padding: 16px 15px;
+    text-align: center;
+    border-bottom: 1px solid #eeeeee;
 }
 
-.reception-table th:first-child {
-    width: 28%;
+.receptions-table tbody tr {
+    transition: 0.2s;
 }
 
-.reception-table th:nth-child(2) {
-    width: 38%;
+.receptions-table tbody tr:hover {
+    background: #fafafa;
 }
-
-.reception-table th:last-child {
-    width: 34%;
-}
-
-
-/* =========================
-   Table Rows
-========================= */
-
-.reception-table tbody tr {
-    background: #111419;
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease;
-}
-
-.reception-table tbody tr:hover {
-    background: #171a20;
-}
-
-.reception-table td {
-    height: 72px;
-
-    padding: 0 22px;
-
-    border-bottom: 1px solid #20242c;
-
-    font-size: 13px;
-}
-
-.reception-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-
-/* =========================
-   Name
-========================= */
 
 .person-name {
-    color: #f4f6f8;
-
-    font-size: 14px !important;
+    text-align: right !important;
     font-weight: 600;
-
-    white-space: nowrap;
+    color: #1f2937;
 }
 
-
-/* =========================
-   Status
-========================= */
-
-.status-buttons {
-    display: flex;
-    align-items: center;
-
-    gap: 8px;
-}
-
-.status-buttons button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-width: 105px;
-
-    padding: 9px 13px;
-
+.receptions-table button {
+    border: none;
+    padding: 9px 18px;
     border-radius: 8px;
-
     font-family: inherit;
-    font-size: 11px;
-    font-weight: 500;
-
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
-
-    transition:
-        background 0.2s,
-        border 0.2s,
-        transform 0.2s;
+    transition: 0.2s;
 }
 
-
-/* Arrived */
-
-.arrived {
-    background: rgba(43, 180, 117, 0.08);
-
-    color: #4fd493;
-
-    border: 1px solid rgba(65, 190, 130, 0.25) !important;
-}
-
-.arrived:hover {
-    background: rgba(43, 180, 117, 0.15);
-
-    border-color: rgba(65, 190, 130, 0.45) !important;
-
+.receptions-table button:hover {
     transform: translateY(-1px);
 }
 
-
-/* Not arrived */
-
-.not-arrived {
-    background: rgba(239, 83, 96, 0.08);
-
-    color: #f27883;
-
-    border: 1px solid rgba(239, 83, 96, 0.22) !important;
+.receptions-table button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
 }
 
-.not-arrived:hover {
-    background: rgba(239, 83, 96, 0.15);
-
-    border-color: rgba(239, 83, 96, 0.4) !important;
-
-    transform: translateY(-1px);
+.present-btn {
+    background: #dcfce7;
+    color: #15803d;
 }
 
+.present-btn:hover {
+    background: #bbf7d0;
+}
 
-/* =========================
-   Consultation Button
-========================= */
+.absent-btn {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.absent-btn:hover {
+    background: #fecaca;
+}
 
 .consultation-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 9px;
-
-    padding: 10px 16px;
-
-    border: 1px solid #2c323c;
-    border-radius: 9px;
-
-    background: #1a1e25;
-
-    color: #e9ecf1;
-
-    font-family: inherit;
-    font-size: 11px;
-    font-weight: 500;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s,
-        border 0.2s,
-        transform 0.2s;
+    background: #dbeafe;
+    color: #2563eb;
 }
 
 .consultation-btn:hover {
-    background: #222730;
-
-    border-color: #3a424f;
-
-    transform: translateY(-1px);
+    background: #bfdbfe;
 }
 
-.consultation-btn span {
-    display: inline-flex;
-
-    font-size: 15px;
-
-    transition: transform 0.2s;
+.empty-row {
+    padding: 40px !important;
+    color: #9ca3af;
 }
 
-.consultation-btn:hover span {
-    transform: translateX(-4px);
+.receptions-loading {
+    direction: rtl;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    color: #6b7280;
+    font-size: 16px;
 }
 
+@media (max-width: 768px) {
 
-/* =========================
-   Empty State
-========================= */
-
-.reception-table tbody:empty::after {
-    content: "مراجعه‌کننده‌ای ثبت نشده است";
-
-    display: block;
-
-    padding: 45px;
-
-    text-align: center;
-
-    color: #737b89;
-
-    font-size: 13px;
-}
-
-
-/* =========================
-   Tablet
-========================= */
-
-@media (max-width: 900px) {
-
-    .reception {
-        padding: 25px 20px;
+    .receptions {
+        padding: 15px;
     }
 
-    .reception-header h1 {
-        font-size: 24px;
+    .receptions-header h1 {
+        font-size: 22px;
     }
 
-    .reception-count {
-        min-width: 135px;
+    .receptions-table th,
+    .receptions-table td {
+        padding: 12px 10px;
     }
 
-}
-
-
-/* =========================
-   Mobile
-========================= */
-
-@media (max-width: 650px) {
-
-    .reception {
-        padding: 20px 12px;
+    .receptions-table button {
+        padding: 8px 12px;
+        font-size: 12px;
     }
-
-    .reception-header {
-        align-items: flex-start;
-
-        margin-bottom: 20px;
-    }
-
-    .reception-header h1 {
-        font-size: 21px;
-    }
-
-    .reception-header p {
-        margin-top: 6px;
-
-        font-size: 11px;
-    }
-
-    .reception-count {
-        min-width: 105px;
-
-        padding: 10px 12px;
-
-        border-radius: 12px;
-    }
-
-    .reception-count span {
-        font-size: 9px;
-    }
-
-    .reception-count strong {
-        font-size: 20px;
-    }
-
-    .table-container {
-        border-radius: 14px;
-    }
-
-    .reception-table {
-        min-width: 720px;
-    }
-
-    .reception-table th {
-        height: 50px;
-
-        padding: 0 16px;
-
-        font-size: 11px;
-    }
-
-    .reception-table td {
-        height: 65px;
-
-        padding: 0 16px;
-    }
-
-    .person-name {
-        font-size: 13px !important;
-    }
-
-    .status-buttons {
-        gap: 6px;
-    }
-
-    .status-buttons button {
-        min-width: 95px;
-
-        padding: 8px 10px;
-
-        font-size: 10px;
-    }
-
-    .consultation-btn {
-        padding: 9px 13px;
-
-        font-size: 10px;
-    }
-
-}
-
-
-/* =========================
-   Very Small Screens
-========================= */
-
-@media (max-width: 400px) {
-
-    .reception-header {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .reception-count {
-        width: 100%;
-        box-sizing: border-box;
-
-        flex-direction: row;
-        justify-content: space-between;
-
-        padding: 11px 15px;
-    }
-
-    .reception-count strong {
-        margin-top: 0;
-    }
-
 }
