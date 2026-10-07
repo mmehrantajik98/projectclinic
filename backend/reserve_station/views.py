@@ -464,6 +464,7 @@ def getNames(request):
             "phone": person.phone,
             "file": person.file,
             "address": person.address,
+            "reserve_date": person.reserve_date,
             "date": person.date,
             "services": person.services,
             "price": person.price,
@@ -473,9 +474,6 @@ def getNames(request):
         for person in model
     ]
 
-    print(f"names:{data}")
-    print("NAMES:", data)
-
     return Response(data)
 
 
@@ -483,28 +481,38 @@ def getNames(request):
 def Post_to_Consent(request):
 
     serial = SubmitConsentSerializer(data=request.data)
-    if serial.is_valid(raise_exception=True):
-        serial.save()
+
+    if not serial.is_valid():
+        print("SERIALIZER ERRORS:", serial.errors)
+        return Response(serial.errors, status=400)
+
+    person = serial.save()
 
     channel_Layer = get_channel_layer()
+
     async_to_sync(channel_Layer.group_send)(
         "services_getdata",
         {
             "type": "postConsent",
-            "name": serial.name,
-            "age": serial.age,
-            "phone": serial.phone,
-            "file": serial.file,
-            "address": serial.address,
-            "date": serial.date,
-            "services": serial.services,
-            "price": serial.price,
-            "explain": serial.explain,
-            "id": serial.id,
+            "name": person.name,
+            "age": person.age,
+            "phone": person.phone,
+            "file": person.file,
+            "address": person.address,
+            "date": str(person.date),
+            "reserve_date": str(person.reserve_date),
+            "services": person.services,
+            "price": person.price,
+            "explain": person.explain,
+            "id": person.id,
         }
     )
 
-    return Response({"successfully": "successfully!"})
+    return Response({
+        "successfully": "successfully!",
+        "id": person.id
+    })
+
     
 
 class CreateTokenCookie(TokenObtainPairView):

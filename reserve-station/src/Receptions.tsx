@@ -7,12 +7,13 @@ interface Person {
     name: string;
     age: number;
     phone: string;
-    file: string | null;
-    address: string;
+    file: number | null;
+    address: string | null;
+    reserve_date: string;
     date: string;
     services: string | null;
-    price: number;
-    explain: string | null;
+    price: number | null;
+    explain: string;
 }
 
 const Receptions = () => {
@@ -64,11 +65,11 @@ const Receptions = () => {
                     phone: person.phone,
                     file: person.file,
                     address: person.address,
+                    reserve_date: person.reserve_date,
                     date: person.date,
                     services: person.services,
                     price: person.price,
                     explain: person.explain,
-                    id: person.id,
                 },
                 {
                     withCredentials: true,
