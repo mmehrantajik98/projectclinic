@@ -122,7 +122,7 @@ class SubmitConsent(models.Model):
     date = models.DateField(auto_now_add=True, null=True)
     services = models.TextField(blank=True, null=True)
     price = models.IntegerField(blank=True, null=True)
-    explain = models.TextField()
+    explain = models.TextField(blank=True, null=True)
 
 
 class PersonalPicture(models.Model):
