@@ -16,6 +16,7 @@ import Dashboard from "./dashboard";
 import ProtectedRoute, { UserProvider } from "./protectedRoute";
 import AuthUser from "./authUser";
 import ProtectedLogin from "./protectedLogin";
+import Receptions from "./Receptions";
 
 const App = () => {
     return (
@@ -67,6 +68,15 @@ const App = () => {
                                                     element={
                                                         <ProtectedRoute allowedroles={["Consent"]}>
                                                             <Consent />
+                                                        </ProtectedRoute>
+                                                    }
+                                                />
+
+                                                <Route
+                                                    path="/Receptions"
+                                                    element={
+                                                        <ProtectedRoute allowedroles={["reception"]}>
+                                                            <Receptions />
                                                         </ProtectedRoute>
                                                     }
                                                 />
