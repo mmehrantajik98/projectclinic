@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Personal, SubmitPersonal, PersonalPicture, Users, SubmitConsent
-from .serializer import PersonalSerializer, PersonalSubmit_Serializer, PersonalPictureSerializer, UserSerializer, SubmitConsentSerializer
+from .models import Personal, SubmitPersonal, PersonalPicture, Users, SubmitConsent, AbcentPatient
+from .serializer import PersonalSerializer, PersonalSubmit_Serializer, PersonalPictureSerializer, UserSerializer, SubmitConsentSerializer, AbcentPatientSerializer
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.db.models import Q
@@ -513,6 +513,47 @@ def Post_to_Consent(request):
         "id": person.id
     })
 
+
+@api_view(["POST"])
+def Post_to_Abcent(request):
+
+    serial = AbcentPatientSerializer(data=request.data)
+
+    if not serial.is_valid():
+        print("SERIALIZER ERRORS:", serial.errors)
+        return Response(serial.errors, status=400)
+
+    person = serial.save()
+
+    return Response({
+        "successfully": "successfully!",
+        "id": person.id
+    })
+
+
+@api_view(["GET"])
+def getAbcent(request):
+
+    model = AbcentPatient.objects.all()
+
+    data = [
+        {
+            "name": person.name,
+            "age": person.age,
+            "phone": person.phone,
+            "file": person.file,
+            "address": person.address,
+            "reserve_date": person.reserve_date,
+            "date": person.date,
+            "services": person.services,
+            "price": person.price,
+            "explain": person.explain,
+            "id": person.id,
+        }
+        for person in model
+    ]
+
+    return Response(data)
     
 
 class CreateTokenCookie(TokenObtainPairView):

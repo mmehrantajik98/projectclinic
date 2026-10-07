@@ -87,8 +87,39 @@ const Receptions = () => {
         }
     };
 
-    const handleAbsent = (id: number) => {
-        console.log("ABSENT:", id);
+    const handleAbsent = async (id: number) => {
+
+        const person = people.find((item) => item.id === id);
+
+        if (!person) {
+            return;
+        }
+
+        try {
+
+            await axios.post(
+                "https://hedro.ir/api/Post_to_Abcent/",
+                {
+                    name: person.name,
+                    age: person.age,
+                    phone: person.phone,
+                    file: person.file,
+                    address: person.address,
+                    reserve_date: person.reserve_date,
+                    services: person.services,
+                    price: person.price,
+                    explain: person.explain,
+                },
+                {
+                    withCredentials: true,
+                }
+            );
+
+            console.log("PERSON SENT TO ABSENT:", person);
+
+        } catch (error) {
+            console.error("POST TO ABSENT ERROR:", error);
+        }
     };
 
     const handleConsultation = (id: number) => {
@@ -119,7 +150,6 @@ const Receptions = () => {
                             <th>نام مراجعه‌کننده</th>
                             <th>حضور</th>
                             <th>عدم حضور</th>
-                            <th>اتاق مشاوره</th>
                         </tr>
                     </thead>
 
@@ -166,17 +196,6 @@ const Receptions = () => {
                                             onClick={() => handleAbsent(person.id)}
                                         >
                                             عدم حضور
-                                        </button>
-                                    </td>
-
-                                    <td>
-                                        <button
-                                            className="consultation-btn"
-                                            onClick={() =>
-                                                handleConsultation(person.id)
-                                            }
-                                        >
-                                            اتاق مشاوره
                                         </button>
                                     </td>
 
