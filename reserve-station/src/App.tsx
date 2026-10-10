@@ -20,7 +20,9 @@ import Receptions from "./Receptions";
 
 
 const App = () => {
+
     return (
+
         <Routes>
 
             <Route
@@ -29,14 +31,10 @@ const App = () => {
             />
 
             <Route
-                path="/sign"
-                element={<Sign />}
-            />
-
-            <Route
                 path="*"
                 element={
                     <ProtectedLogin>
+
                         <AuthUser>
 
                             <UserProvider>
@@ -48,6 +46,12 @@ const App = () => {
                                         <Layout>
 
                                             <Routes>
+
+                                                
+                                                <Route
+                                                    path="/sign"
+                                                    element={<Sign />}
+                                                />
 
                                                 <Route
                                                     path="/"
@@ -119,6 +123,11 @@ const App = () => {
                                                 />
 
                                                 <Route
+                                                    path="/assistant/:name"
+                                                    element={<PersonInfo />}
+                                                />
+
+                                                <Route
                                                     path="/peoples/:id"
                                                     element={<PersonInfo />}
                                                 />
@@ -134,12 +143,15 @@ const App = () => {
                             </UserProvider>
 
                         </AuthUser>
+
                     </ProtectedLogin>
                 }
             />
 
         </Routes>
+
     );
+
 };
 
 export default App;

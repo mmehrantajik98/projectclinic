@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Personal, SubmitPersonal, PersonalPicture, Users, SubmitConsent, AbcentPatient, Asistant
+from .models import Personal, SubmitPersonal, PersonalPicture, Users, SubmitConsent, AbcentPatient, Asistant, whoisAsistant
 from .serializer import PersonalSerializer, PersonalSubmit_Serializer, PersonalPictureSerializer, UserSerializer, SubmitConsentSerializer, AbcentPatientSerializer, AsistantSerializer, whoisAsistantSerializer
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
@@ -626,6 +626,15 @@ def post_asistant_with_Personal(request):
     return Response({
             "successfully": "successfully!",
         })
+
+
+@api_view(["GET"])
+def get_personal_for_assistant(request):
+
+    personal = whoisAsistant.objects.all()
+    serializer = whoisAsistantSerializer(personal, many=True)
+    
+    return Response(serializer.data)
     
 
 class CreateTokenCookie(TokenObtainPairView):

@@ -19,6 +19,7 @@ urlpatterns = [
     path("post_asistant_with_Personal/", views.post_asistant_with_Personal, name="post sistant with patients"),
     path("post_Asistant/", views.Post_to_Asistant, name="post info for Asistant"),
     path("get_Asistants_personal/", views.get_Asistants_personal, name="info for Asistant"),
+    path("get_personal_for_assistant/", views.get_personal_for_assistant, name="get personal for assistants"),
     path("Logout/", views.Logout, name="logout and del cookies"),
     path("login/", views.CreateTokenCookie.as_view(), name="login users"),
     path("delete_service/<int:person_id>/", views.Delete_Servies, name="Delete Servies"),
