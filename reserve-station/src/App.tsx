@@ -17,6 +17,7 @@ import ProtectedRoute, { UserProvider } from "./protectedRoute";
 import AuthUser from "./authUser";
 import ProtectedLogin from "./protectedLogin";
 import Receptions from "./Receptions";
+import Asistant from "./Assistant";
 
 const App = () => {
     return (
@@ -84,7 +85,7 @@ const App = () => {
                                                 <Route
                                                     path="/Assistant"
                                                     element={
-                                                        <ProtectedRoute allowedroles={["Assistant"]}>
+                                                        <ProtectedRoute allowedroles={["Assistant_Manager"]}>
                                                             <Assistant />
                                                         </ProtectedRoute>
                                                     }

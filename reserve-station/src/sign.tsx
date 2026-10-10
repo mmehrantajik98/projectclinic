@@ -156,8 +156,10 @@ const Sign = () => {
                                 onChange={handleChange}
                             >
                                 <option value="">انتخاب نقش</option>
-                                <option value="callcenter">کال سنتر</option>
                                 <option value="CEO">مدیر</option>
+                                <option value="callcenter">کال سنتر</option>
+                                <option value="Assistant_Manager">مدیر بالینی</option>
+                                <option value="Assistant">دستیار</option>
                                 <option value="marketing">مارکتینگ</option>
                                 <option value="doctor">دکتر</option>
                                 <option value="photographer">عکاس</option>
