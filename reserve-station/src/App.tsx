@@ -17,9 +17,15 @@ import ProtectedRoute, { UserProvider } from "./protectedRoute";
 import AuthUser from "./authUser";
 import ProtectedLogin from "./protectedLogin";
 import Receptions from "./Receptions";
+import { useContext } from "react";
+import { UserContext } from "./protectedRoute";
+import PersonalAsistant from "./personal_Asistant";
+
 
 
 const App = () => {
+
+    const user = useContext(UserContext)
 
     return (
 
@@ -124,7 +130,7 @@ const App = () => {
 
                                                 <Route
                                                     path="/assistant/:name"
-                                                    element={<PersonInfo />}
+                                                    element={user?.role === "Assistant" && <PersonalAsistant />}
                                                 />
 
                                                 <Route

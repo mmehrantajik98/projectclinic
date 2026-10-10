@@ -2,6 +2,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./consent.css";
+import { useParams } from "react-router-dom";
 
 interface Personal {
     id: number;
@@ -19,7 +20,9 @@ interface Personal {
 
 interface WhoIsAssistant {
     id: number;
-    assistant: number | null;
+    assistant: {
+        username: string;
+    } | null;
     patient: Personal | null;
 }
 
@@ -27,6 +30,8 @@ const PersonalAsistant: React.FC = () => {
     const [afrad, setAfrad] = useState<Personal[]>([]);
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);
+
+    const { name } = useParams();
 
     const selectedPerson = afrad.find(
         (person) => person.id === selectedId
@@ -43,6 +48,10 @@ const PersonalAsistant: React.FC = () => {
                 );
 
                 const patients = req.data
+                    .filter(
+                        (item) =>
+                            item.assistant?.username === name
+                    )
                     .map((item) => item.patient)
                     .filter(
                         (patient): patient is Personal =>
@@ -66,7 +75,7 @@ const PersonalAsistant: React.FC = () => {
         };
 
         getPersonalForAssistant();
-    }, []);
+    }, [name]);
 
     return (
         <div className="consent-container">
@@ -101,7 +110,9 @@ const PersonalAsistant: React.FC = () => {
                     <div className="details-header">
                         <h2>{selectedPerson.name}</h2>
 
-                        <button onClick={() => setSelectedId(null)}>
+                        <button
+                            onClick={() => setSelectedId(null)}
+                        >
                             بستن
                         </button>
                     </div>
@@ -145,7 +156,9 @@ const PersonalAsistant: React.FC = () => {
                         <div>
                             <span>قیمت</span>
                             <p>
-                                {selectedPerson.price?.toLocaleString("en-US")}
+                                {selectedPerson.price?.toLocaleString(
+                                    "en-US"
+                                )}
                             </p>
                         </div>
 
